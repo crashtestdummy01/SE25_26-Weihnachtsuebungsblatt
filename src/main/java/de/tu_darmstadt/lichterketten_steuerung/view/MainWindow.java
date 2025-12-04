@@ -4,14 +4,19 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 
 public class MainWindow {
 
-    private JPanel lightsListContainer;
+    private JPanel stringlightListPanel;
     private JComboBox<String> areaSelector;
     private JComboBox<String> lightIdSelector;
-    private JButton btnOn, btnOff, btnMode, btnColor;
+    private JButton btnOn;
+    private JButton btnOff;
+    private JCheckBox btnMode;
+    private JButton btnColor;
     private JTable macroTable;
     private JButton btnOpenMacroEditor;
     private JFrame frame;
@@ -50,26 +55,26 @@ public class MainWindow {
 
     private JComponent createLightListPanel() {
         // Use a panel with vertical BoxLayout to stack widgets
-        lightsListContainer = new JPanel();
-        lightsListContainer.setLayout(new BoxLayout(lightsListContainer, BoxLayout.Y_AXIS));
+        stringlightListPanel = new JPanel();
+        stringlightListPanel.setLayout(new BoxLayout(stringlightListPanel, BoxLayout.Y_AXIS));
         // Add some padding around the edges of the list
-        lightsListContainer.setBorder(new EmptyBorder(5, 5, 5, 5));
+        stringlightListPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
         // Add placeholder custom widgets
-        lightsListContainer.add(new StringLightWidget("L-101", "Patio Main", Color.RED, false));
+        stringlightListPanel.add(new StringLightWidget("L-101", "Patio Main", Color.RED, false));
         // Add a tiny gap between widgets
-        lightsListContainer.add(Box.createVerticalStrut(5));
-        lightsListContainer.add(new StringLightWidget("L-102", "Garden Path", Color.BLUE, true));
-        lightsListContainer.add(Box.createVerticalStrut(5));
-        lightsListContainer.add(new StringLightWidget("L-103", "Roof Edge", Color.GREEN, true));
+        stringlightListPanel.add(Box.createVerticalStrut(5));
+        stringlightListPanel.add(new StringLightWidget("L-102", "Garden Path", Color.BLUE, true));
+        stringlightListPanel.add(Box.createVerticalStrut(5));
+        stringlightListPanel.add(new StringLightWidget("L-103", "Roof Edge", Color.GREEN, true));
 
         // Add "glue" to push items to the top if the list is short
-        lightsListContainer.add(Box.createVerticalGlue());
+        stringlightListPanel.add(Box.createVerticalGlue());
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("String Lights"));
         // Wrap the container in a JScrollPane
-        JScrollPane scrollPane = new JScrollPane(lightsListContainer);
+        JScrollPane scrollPane = new JScrollPane(stringlightListPanel);
         // Increase scrolling speed slightly
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -94,8 +99,31 @@ public class MainWindow {
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
         btnOn = new JButton("ON");
         btnOff = new JButton("OFF");
-        btnMode = new JButton("Set Mode");
+        btnMode = new JCheckBox("Blink");
         btnColor = new JButton("Set Color");
+
+        btnColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color initialColor = Color.WHITE;
+
+                // Launch the color chooser dialog
+                Color newColor = JColorChooser.showDialog(
+                        panel.getTopLevelAncestor(),
+                        "Select Light Color",
+                        initialColor
+                );
+
+                if (newColor != null) {
+                    // TODO: Replace this placeholder with your actual model update logic
+                    System.out.println("Selected Color: " + newColor);
+
+                    // You would typically store the last chosen color or update the indicator here
+                }
+            }
+        });
+
+        panel.add(btnColor);
 
         row2.add(btnOn);
         row2.add(btnOff);

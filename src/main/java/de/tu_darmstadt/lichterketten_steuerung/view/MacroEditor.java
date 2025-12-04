@@ -2,6 +2,10 @@ package de.tu_darmstadt.lichterketten_steuerung.view;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.stream.IntStream;
 
 public class MacroEditor {
@@ -11,45 +15,46 @@ public class MacroEditor {
     // Components exposed for the Controller
     private JComboBox<String> areaSelector;
     private JComboBox<String> lightIdSelector;
-    private JComboBox<String> timeSelector; // For time slot selection
-    private JButton btnOn, btnOff, btnMode, btnColor;
+    private JSpinner timeSelector;
+
+    // CHANGED: Radio buttons and Checkbox
+    private JRadioButton rbOn, rbOff;
+    private ButtonGroup powerGroup; // Group to link On/Off radio buttons
+    private JCheckBox chkBlink;
+
+    private JButton btnColor;
     private JButton btnSave, btnDiscard;
 
     /**
      * Creates a non-modal macro editor pop-up window.
-     *
      * @param owner The JFrame this dialog belongs to (your main window).
      */
     public MacroEditor(JFrame owner) {
-        // JDialog is the pop-up container
-        dialog = new JDialog(owner, "Macro Editor", false); // 'false' means non-modal
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE); // Close only the dialog
+        dialog = new JDialog(owner, "Macro Editor", false);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        // Use BorderLayout for the main structure (Control Panel + Buttons)
         dialog.setLayout(new BorderLayout());
 
-        // 1. Create the Main Control Panel (Top)
         JComponent controlPanel = createControlPanel();
         dialog.add(controlPanel, BorderLayout.CENTER);
 
-        // 2. Create the Action Buttons Panel (Bottom)
         JComponent buttonPanel = createButtonPanel();
         dialog.add(buttonPanel, BorderLayout.SOUTH);
 
-        dialog.pack(); // Size the dialog to fit components
+        dialog.pack();
         dialog.setLocationRelativeTo(owner);
     }
 
     private JComponent createControlPanel() {
-        // Use a vertical BoxLayout to stack the three rows (Time, Selection, Buttons)
+        // Use a vertical BoxLayout to stack the three rows (Time, Selection, Controls)
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // --- Row 1: Time Slot Picker ---
         JPanel timeRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        timeRow.add(new JLabel("Run Time:"));
-        timeSelector = createTimeSlotPicker();
+        timeRow.add(new JLabel("Time:"));
+        timeSelector = createTimeSpinner();
         timeRow.add(timeSelector);
 
         // --- Row 2: Selection Dropdowns (Area & Light ID) ---
@@ -62,16 +67,52 @@ public class MacroEditor {
         selectionRow.add(new JLabel("Target ID:"));
         selectionRow.add(lightIdSelector);
 
-        // --- Row 3: Action Buttons (ON/OFF/MODE/COLOR) ---
+        // --- Row 3: Control Options (ON/OFF, BLINK, COLOR) ---
         JPanel actionRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        btnOn = new JButton("ON");
-        btnOff = new JButton("OFF");
-        btnMode = new JButton("Set Mode");
+
+        // 1. Radio Buttons (ON/OFF)
+        rbOn = new JRadioButton("ON");
+        rbOff = new JRadioButton("OFF");
+        rbOn.setSelected(true); // Default selection
+
+        powerGroup = new ButtonGroup();
+        powerGroup.add(rbOn);
+        powerGroup.add(rbOff);
+
+        // 2. Checkbox (BLINK)
+        chkBlink = new JCheckBox("Blink");
+
+        // 3. Button (COLOR)
         btnColor = new JButton("Set Color");
 
-        actionRow.add(btnOn);
-        actionRow.add(btnOff);
-        actionRow.add(btnMode);
+        btnColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Color initialColor = Color.WHITE;
+
+                // Launch the color chooser dialog
+                Color newColor = JColorChooser.showDialog(
+                        panel.getTopLevelAncestor(),
+                        "Select Light Color",
+                        initialColor
+                );
+
+                if (newColor != null) {
+                    // TODO: Replace this placeholder with your actual model update logic
+                    System.out.println("Selected Color: " + newColor);
+
+                    // You would typically store the last chosen color or update the indicator here
+                }
+            }
+        });
+
+        // Add controls to the row
+        actionRow.add(new JLabel("Power:"));
+        actionRow.add(rbOn);
+        actionRow.add(rbOff);
+        actionRow.add(Box.createHorizontalStrut(20)); // Spacing
+        actionRow.add(chkBlink);
+        actionRow.add(Box.createHorizontalStrut(20));
         actionRow.add(btnColor);
 
         // Add rows to the main panel
@@ -84,7 +125,7 @@ public class MacroEditor {
 
     // Helper method for the time slot picker (00:00 to 23:30)
     private JComboBox<String> createTimeSlotPicker() {
-        String[] times = IntStream.range(0, 24) // 0 to 23 hours
+        String[] times = IntStream.range(0, 24)
                 .mapToObj(h -> {
                     String hour = String.format("%02d", h);
                     return new String[]{hour + ":00", hour + ":30"};
@@ -93,22 +134,68 @@ public class MacroEditor {
                 .toArray(String[]::new);
 
         JComboBox<String> selector = new JComboBox<>(times);
-        selector.setSelectedItem("18:00"); // Placeholder default time
+        selector.setSelectedItem("18:00");
         return selector;
     }
 
     private JComponent createButtonPanel() {
-        // Use FlowLayout anchored to the right for "Save/Discard" buttons
-        return new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+
+        btnSave = new JButton("Save Macro");
+        btnDiscard = new JButton("Discard");
+
+        panel.add(btnDiscard);
+        panel.add(btnSave);
+        return panel;
     }
 
+    private JSpinner createTimeSpinner() {
+        // 1. Define the model to handle Date objects
+        // Start date (irrelevant), End date (irrelevant), Step (1 minute), Calendar Field (Minute)
+        SpinnerDateModel model = new SpinnerDateModel(
+            new Date(), null, null, Calendar.MINUTE
+        );
+        JSpinner spinner = new JSpinner(model);
+
+        // 2. Define the format to display only the time (e.g., HH:mm)
+        JSpinner.DateEditor editor = new JSpinner.DateEditor(
+            spinner,
+            "HH:mm" // 24-hour format
+            // OR "hh:mm a" for 12-hour format with AM/PM
+        );
+        spinner.setEditor(editor);
+
+        // Optional: Set the initial time (e.g., 6:00 PM)
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 18);
+        cal.set(Calendar.MINUTE, 0);
+        spinner.setValue(cal.getTime());
+
+        return spinner;
+    }
+
+    // --- Control Methods ---
+
     public void show() {
-        // Use setVisible to make the pop-up appear
         dialog.setVisible(true);
     }
 
     public void hide() {
-        // Use dispose to close and free resources
         dialog.dispose();
     }
+
+    // --- Getters for Controller Binding (Updated) ---
+
+    public JComboBox<String> getAreaSelector() { return areaSelector; }
+    public JComboBox<String> getLightIdSelector() { return lightIdSelector; }
+    public JSpinner getTimeSelector() { return timeSelector; }
+
+    public JRadioButton getRbOn() { return rbOn; }
+    public JRadioButton getRbOff() { return rbOff; }
+    public ButtonGroup getPowerGroup() { return powerGroup; } // Useful for checking selection status
+    public JCheckBox getChkBlink() { return chkBlink; }
+
+    public JButton getBtnColor() { return btnColor; }
+    public JButton getBtnSave() { return btnSave; }
+    public JButton getBtnDiscard() { return btnDiscard; }
 }
