@@ -22,6 +22,12 @@
                 <version>3.2.0</version>
                 <configuration>
                     <mainClass>de.tu_darmstadt.lichterketten_steuerung.App</mainClass>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>sun.java2d.uiScale</key>
+                            <value>2</value>
+                        </systemProperty>
+                    </systemProperties>
                 </configuration>
             </plugin>
 
