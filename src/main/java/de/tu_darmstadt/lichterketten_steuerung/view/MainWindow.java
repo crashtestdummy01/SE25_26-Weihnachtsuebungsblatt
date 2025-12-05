@@ -4,12 +4,17 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class MainWindow {
 
-    private JPanel stringlightListPanel;
-    private JTable macroTable;
-    private JButton btnOpenMacroEditor;
+    public JPanel stringlightListPanel;
+    public JTable macroTable;
+    public JButton btnOpenMacroEditor;
+    public JButton btnNewStringLight;
+    public ControlPanel controlPanel;
+
     private JFrame frame;
 
     public MainWindow() {
@@ -20,7 +25,7 @@ public class MainWindow {
         frame.setSize(1000, 700);
 
         JComponent stringlightListPanel = createLightListPanel();
-        JComponent controlPanel = new ControlPanel();
+        controlPanel = new ControlPanel();
         JComponent macroListPanel = createMacroListPanel();
         JComponent editMacroButtonPanel = createMacroEditorPanel();
 
@@ -40,30 +45,28 @@ public class MainWindow {
     }
 
     private JComponent createLightListPanel() {
-        // Use a panel with vertical BoxLayout to stack widgets
         stringlightListPanel = new JPanel();
         stringlightListPanel.setLayout(new BoxLayout(stringlightListPanel, BoxLayout.Y_AXIS));
-        // Add some padding around the edges of the list
         stringlightListPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        // Add placeholder custom widgets
-        stringlightListPanel.add(new StringLightWidget("L-101", "Patio Main", Color.RED, false));
-        // Add a tiny gap between widgets
+        stringlightListPanel.add(new StringLightWidget("L-101",  Color.RED, false));
         stringlightListPanel.add(Box.createVerticalStrut(5));
-        stringlightListPanel.add(new StringLightWidget("L-102", "Garden Path", Color.BLUE, true));
+        stringlightListPanel.add(new StringLightWidget("L-102",  Color.BLUE, true));
         stringlightListPanel.add(Box.createVerticalStrut(5));
-        stringlightListPanel.add(new StringLightWidget("L-103", "Roof Edge", Color.GREEN, true));
+        stringlightListPanel.add(new StringLightWidget("L-103",  Color.GREEN, true));
+        stringlightListPanel.add(Box.createVerticalStrut(5));
+        btnNewStringLight = new JButton("+");
+        btnNewStringLight.setFont(btnNewStringLight.getFont().deriveFont(Font.BOLD, 16f));
+        stringlightListPanel.add(btnNewStringLight);
 
-        // Add "glue" to push items to the top if the list is short
         stringlightListPanel.add(Box.createVerticalGlue());
 
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBorder(BorderFactory.createTitledBorder("String Lights"));
-        // Wrap the container in a JScrollPane
         JScrollPane scrollPane = new JScrollPane(stringlightListPanel);
-        // Increase scrolling speed slightly
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
         panel.add(scrollPane, BorderLayout.CENTER);
+
         return panel;
     }
 
@@ -96,4 +99,68 @@ public class MainWindow {
 
         return panel;
     }
+
+    public String getAreaName(String title, String message) {
+        // Reset the value before starting the new dialog
+        AtomicReference<String> inputValue = new AtomicReference<>();
+
+        // JDialog is the pop-up container. Set it to MODAL.
+        JDialog dialog = new JDialog(frame, title, true);
+        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+
+        // Use a BorderLayout for structure
+        JPanel contentPanel = new JPanel(new BorderLayout(10, 10));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(15, 15, 10, 15));
+
+        // Text field for user input
+        JTextField inputField = new JTextField(20);
+
+        // Add message label and input field
+        contentPanel.add(new JLabel(message), BorderLayout.NORTH);
+        contentPanel.add(inputField, BorderLayout.CENTER);
+
+        // --- Buttons Panel ---
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 0));
+        JButton acceptButton = new JButton("Accept");
+        JButton cancelButton = new JButton("Cancel");
+
+        buttonPanel.add(cancelButton);
+        buttonPanel.add(acceptButton);
+
+        contentPanel.add(buttonPanel, BorderLayout.SOUTH);
+
+        dialog.setContentPane(contentPanel);
+
+        // --- Action Listeners ---
+
+        // 1. Accept Button Listener
+        ActionListener acceptListener = e -> {
+            inputValue.set(inputField.getText().trim());
+            if (inputValue.get().isEmpty()) {
+                JOptionPane.showMessageDialog(dialog, "Please enter an area.", "Input Required", JOptionPane.WARNING_MESSAGE);
+                return; // Do not close the dialog
+            }
+            dialog.dispose(); // Close the dialog
+        };
+
+        // 2. Cancel Button Listener
+        ActionListener cancelListener = e -> {
+            // inputValue remains null
+            dialog.dispose(); // Close the dialog
+        };
+
+        acceptButton.addActionListener(acceptListener);
+        cancelButton.addActionListener(cancelListener);
+        inputField.addActionListener(acceptListener); // Allow pressing Enter to accept
+
+        // --- Display Dialog ---
+        dialog.pack();
+        dialog.setResizable(false);
+        dialog.setLocationRelativeTo(frame);
+        dialog.setVisible(true); // This call BLOCKS until dialog.dispose() is called
+
+        // Once the dialog is disposed, execution continues here, returning the result
+        return inputValue.get();
+    }
+
 }

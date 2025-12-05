@@ -1,5 +1,6 @@
 package de.tu_darmstadt.lichterketten_steuerung;
 
+import de.tu_darmstadt.lichterketten_steuerung.controllers.MainWindowController;
 import de.tu_darmstadt.lichterketten_steuerung.view.MainWindow;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ public class App {
     }
 
     private static void showGUI() {
-        new MainWindow();
+        MainWindow root = new MainWindow();
+        MainWindowController controller = new MainWindowController(root);
     }
 }

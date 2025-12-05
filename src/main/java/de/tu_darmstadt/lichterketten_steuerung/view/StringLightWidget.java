@@ -1,5 +1,7 @@
 package de.tu_darmstadt.lichterketten_steuerung.view;
 
+import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
+
 import javax.swing.*;
 import java.awt.*;
 import javax.swing.border.EmptyBorder;
@@ -14,7 +16,7 @@ public class StringLightWidget extends JPanel {
     private static final Color STATUS_ON_COLOR = Color.YELLOW;
     private static final Color STATUS_OFF_COLOR = Color.BLACK;
 
-    public StringLightWidget(String id, String name, Color initialColor, boolean isOn) {
+    public StringLightWidget(String id, Color initialColor, boolean isOn) {
         super(new BorderLayout(5, 0));
 
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
@@ -23,7 +25,7 @@ public class StringLightWidget extends JPanel {
         setBackground(Color.WHITE);
 
 
-        infoLabel = new JLabel(id + " - " + name);
+        infoLabel = new JLabel(id);
         infoLabel.setFont(infoLabel.getFont().deriveFont(Font.BOLD, 12f));
         infoLabel.setBorder(new EmptyBorder(0, 10, 0, 0));
 
