@@ -5,7 +5,6 @@ import java.awt.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-
 public class StringLightWidget extends JPanel {
     private final JLabel infoLabel;
     private final JPanel colorIndicator;

@@ -4,19 +4,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-
 
 public class MainWindow {
 
     private JPanel stringlightListPanel;
-    private JComboBox<String> areaSelector;
-    private JComboBox<String> lightIdSelector;
-    private JButton btnOn;
-    private JButton btnOff;
-    private JCheckBox btnMode;
-    private JButton btnColor;
     private JTable macroTable;
     private JButton btnOpenMacroEditor;
     private JFrame frame;
@@ -28,22 +19,17 @@ public class MainWindow {
 
         frame.setSize(1000, 700);
 
-        // 1. Create the Four Main Panels
-        JComponent topLeft = createLightListPanel();
-        JComponent bottomLeft = new ControlPanel();
-        JComponent topRight = createMacroListPanel();
-        JComponent bottomRight = createMacroEditorPanel();
+        JComponent stringlightListPanel = createLightListPanel();
+        JComponent controlPanel = new ControlPanel();
+        JComponent macroListPanel = createMacroListPanel();
+        JComponent editMacroButtonPanel = createMacroEditorPanel();
 
-        // 2. Create Split Panes for Resizability
-        // Left Column (Top vs Bottom)
-        JSplitPane splitLeft = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topLeft, bottomLeft);
-        splitLeft.setResizeWeight(0.7); // Top gets 70% space
+        JSplitPane splitLeft = new JSplitPane(JSplitPane.VERTICAL_SPLIT, stringlightListPanel, controlPanel);
+        splitLeft.setResizeWeight(0.7);
 
-        // Right Column (Top vs Bottom)
-        JSplitPane splitRight = new JSplitPane(JSplitPane.VERTICAL_SPLIT, topRight, bottomRight);
-        splitRight.setResizeWeight(0.8); // Top gets 80% space
+        JSplitPane splitRight = new JSplitPane(JSplitPane.VERTICAL_SPLIT, macroListPanel, editMacroButtonPanel);
+        splitRight.setResizeWeight(0.8);
 
-        // Main Split (Left vs Right)
         JSplitPane splitMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitLeft, splitRight);
         splitMain.setDividerLocation((int) Math.round(frame.getSize().width * 0.7));
 
@@ -82,7 +68,6 @@ public class MainWindow {
     }
 
     private JComponent createMacroListPanel() {
-        // Table with "Macro Name" and "Active" columns
         String[] columns = {"Macro Name", "Is Active"};
         Object[][] placeholderData = {{"Sunset Mode", "YES"}, {"Party Mode", "NO"}};
 
@@ -108,6 +93,7 @@ public class MainWindow {
          MacroEditor editor = new MacroEditor(frame);
          editor.show();
         });
-            return panel;
+
+        return panel;
     }
 }
