@@ -1,29 +1,30 @@
 package de.tu_darmstadt.lichterketten_steuerung.view;
 
+import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class ControlPanel extends JPanel {
+public class ControlPanel extends JPanel implements Observer {
 
-    private JComboBox<String> areaSelector;
-    private JComboBox<String> lightIdSelector;
+    public JComboBox<String> areaSelector;
+    public JComboBox<String> lightIdSelector;
 
     private ButtonGroup powerGroup;
-    private JRadioButton rbOn;
-    private JRadioButton rbOff;
+    public JRadioButton rbOn;
+    public JRadioButton rbOff;
 
-    private JCheckBox chkBlink;
-    private JButton btnColor;
+    public JButton btnColor;
 
     public ControlPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         JPanel selectionRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        areaSelector = new JComboBox<>(new String[]{"-- Area --", "Patio", "Garden"});
-        lightIdSelector = new JComboBox<>(new String[]{"-- Light ID --", "1", "2", "3"});
+        areaSelector = new JComboBox<>(new String[]{"--None--"});
+        lightIdSelector = new JComboBox<>(new String[]{"--None--"});
 
         selectionRow.add(new JLabel("Target Area:"));
         selectionRow.add(areaSelector);
@@ -35,14 +36,11 @@ public class ControlPanel extends JPanel {
         // 1. Radio Buttons (ON/OFF)
         rbOn = new JRadioButton("ON");
         rbOff = new JRadioButton("OFF");
-        rbOn.setSelected(true); // Default selection
+        rbOff.setSelected(true); // Default selection
 
         powerGroup = new ButtonGroup();
         powerGroup.add(rbOn);
         powerGroup.add(rbOff);
-
-        // 2. Checkbox (BLINK)
-        chkBlink = new JCheckBox("Blink");
 
         // 3. Button (COLOR)
         btnColor = new JButton("Set Color");
@@ -73,12 +71,34 @@ public class ControlPanel extends JPanel {
         actionRow.add(rbOn);
         actionRow.add(rbOff);
         actionRow.add(Box.createHorizontalStrut(20)); // Spacing
-        actionRow.add(chkBlink);
         actionRow.add(Box.createHorizontalStrut(20));
         actionRow.add(btnColor);
 
         // Add rows to the main panel
         add(selectionRow);
         add(actionRow);
+    }
+
+    @Override
+    public void update(StringLightList lightList) {
+        try {
+            StringLightList stringLightList = (StringLightList) lightList;
+            int index = areaSelector.getSelectedIndex();
+            areaSelector.removeAllItems();
+            areaSelector.addItem("--None--");
+            for (String area : stringLightList.getAreas()) {
+                areaSelector.addItem(area);
+            }
+            areaSelector.setSelectedIndex(index);
+            areaSelector.updateUI();
+
+            lightIdSelector.removeAllItems();
+            lightIdSelector.addItem("--None--");
+            for (String light : stringLightList.getIDs()) {
+                lightIdSelector.addItem(light);
+            }
+
+            lightIdSelector.updateUI();
+        }catch (Exception ignored) {}
     }
 }

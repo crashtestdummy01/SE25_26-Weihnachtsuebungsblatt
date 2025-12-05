@@ -1,7 +1,11 @@
 package de.tu_darmstadt.lichterketten_steuerung.view;
 
+import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -10,12 +14,16 @@ public class MacroEditor {
     private final JDialog dialog;
     private JSpinner timeSelector;
     private JButton btnSave, btnDiscard;
+    private Controller controller;
+    private ControlPanel controlPanel;
 
-    public MacroEditor(JFrame owner) {
+    public MacroEditor(JFrame owner, StringLightList controller) {
         dialog = new JDialog(owner, "Macro Editor", false);
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         dialog.setLayout(new BorderLayout());
+
+        this.controller = controller;
 
         JPanel timeRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
         timeRow.add(new JLabel("Select time:"));
@@ -24,14 +32,30 @@ public class MacroEditor {
 
         dialog.add(timeRow, BorderLayout.NORTH);
 
-        JComponent controlPanel = new ControlPanel();
+        controlPanel = new ControlPanel();
         dialog.add(controlPanel, BorderLayout.CENTER);
 
         JComponent buttonPanel = createButtonPanel();
         dialog.add(buttonPanel, BorderLayout.SOUTH);
 
+        dialog.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                onDestroy();
+            }
+        });
+
+        controlPanel.areaSelector.addActionListener(e -> {
+            String selectedArea = (String) controlPanel.areaSelector.getSelectedItem();
+            controller.selectStringLightsWith(stringLight -> stringLight.area().equals(selectedArea));
+        });
+
         dialog.pack();
         dialog.setLocationRelativeTo(owner);
+    }
+
+    private void onDestroy(){
+        controller.unsubscribe(controlPanel);
     }
 
     private JSpinner createTimeSpinner() {
@@ -60,6 +84,8 @@ public class MacroEditor {
     }
 
     public void show() {
+        controller.subscribe(controlPanel);
+        controller.notifyObservers();
         dialog.setVisible(true);
     }
 

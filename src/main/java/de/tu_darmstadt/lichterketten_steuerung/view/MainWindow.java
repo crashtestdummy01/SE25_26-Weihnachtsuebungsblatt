@@ -1,5 +1,7 @@
 package de.tu_darmstadt.lichterketten_steuerung.view;
 
+import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.border.EmptyBorder;
@@ -7,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MainWindow {
+public class MainWindow implements Observer {
 
     public JPanel stringlightListPanel;
     public JTable macroTable;
@@ -15,7 +17,7 @@ public class MainWindow {
     public JButton btnNewStringLight;
     public ControlPanel controlPanel;
 
-    private JFrame frame;
+    public JFrame frame;
 
     public MainWindow() {
         frame = new JFrame("Lichterketten Steuerung System");
@@ -44,17 +46,16 @@ public class MainWindow {
         frame.setVisible(true);
     }
 
+    @Override
+    public void update(StringLightList lightList) {
+
+    }
+
     private JComponent createLightListPanel() {
         stringlightListPanel = new JPanel();
         stringlightListPanel.setLayout(new BoxLayout(stringlightListPanel, BoxLayout.Y_AXIS));
         stringlightListPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 
-        stringlightListPanel.add(new StringLightWidget("L-101",  Color.RED, false));
-        stringlightListPanel.add(Box.createVerticalStrut(5));
-        stringlightListPanel.add(new StringLightWidget("L-102",  Color.BLUE, true));
-        stringlightListPanel.add(Box.createVerticalStrut(5));
-        stringlightListPanel.add(new StringLightWidget("L-103",  Color.GREEN, true));
-        stringlightListPanel.add(Box.createVerticalStrut(5));
         btnNewStringLight = new JButton("+");
         btnNewStringLight.setFont(btnNewStringLight.getFont().deriveFont(Font.BOLD, 16f));
         stringlightListPanel.add(btnNewStringLight);
@@ -91,11 +92,6 @@ public class MainWindow {
         btnOpenMacroEditor.setPreferredSize(new Dimension(150, 40));
 
         panel.add(btnOpenMacroEditor);
-
-        btnOpenMacroEditor.addActionListener(e -> {
-         MacroEditor editor = new MacroEditor(frame);
-         editor.show();
-        });
 
         return panel;
     }
