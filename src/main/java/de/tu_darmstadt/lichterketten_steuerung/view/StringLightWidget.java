@@ -10,7 +10,6 @@ import javax.swing.border.LineBorder;
 
 public class StringLightWidget extends JPanel implements Observer{
     private final JLabel infoLabel;
-    private final JPanel colorIndicator;
     private final JPanel statusIndicator;
 
     private static final Dimension INDICATOR_SIZE = new Dimension(16, 16);
@@ -45,43 +44,18 @@ public class StringLightWidget extends JPanel implements Observer{
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        indicatorsPanel.add(new JLabel("Color:"), gbc);
-
-        gbc.gridx = 2;
         indicatorsPanel.add(new JLabel("Status:"), gbc);
-
-
-        colorIndicator = new JPanel();
-        colorIndicator.setPreferredSize(INDICATOR_SIZE);
-        colorIndicator.setBackground(initialColor);
-        colorIndicator.setBorder(new LineBorder(Color.BLACK));
-
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.insets = new Insets(2, 5, 2, 50);
-        indicatorsPanel.add(colorIndicator, gbc);
-        gbc.insets = new Insets(2, 5, 2, 5);
-
 
         statusIndicator = new JPanel();
         statusIndicator.setPreferredSize(INDICATOR_SIZE);
         updateStatusIndicator(isOn);
         statusIndicator.setBorder(new LineBorder(Color.BLACK));
 
-        gbc.gridx = 3;
-        gbc.weightx = 0;
+        gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.CENTER;
         indicatorsPanel.add(statusIndicator, gbc);
 
         add(indicatorsPanel, BorderLayout.EAST);
-    }
-
-    public void setLightColor(Color c) {
-        colorIndicator.setBackground(c);
-        colorIndicator.repaint();
     }
 
     public void setStatus(boolean isOn) {
@@ -103,6 +77,9 @@ public class StringLightWidget extends JPanel implements Observer{
 
         if (thisStringLightModel == null) { return;}
         setStatus(thisStringLightModel.isOn());
-        setLightColor(thisStringLightModel.color());
+    }
+
+    public String getId() {
+        return id;
     }
 }

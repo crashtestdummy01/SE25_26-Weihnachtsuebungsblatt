@@ -4,10 +4,7 @@ import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
 public class ControlPanel extends JPanel implements Observer {
@@ -15,7 +12,7 @@ public class ControlPanel extends JPanel implements Observer {
     private JComboBox<String> areaSelector;
     private JComboBox<String> lightIdSelector;
     private JCheckBox chkOnOff;
-    private JButton btnColor;
+    private JButton btnRemove;
 
     public ControlPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -34,36 +31,14 @@ public class ControlPanel extends JPanel implements Observer {
 
         chkOnOff = new JCheckBox("ON/OFF");
 
-        // 3. Button (COLOR)
-        btnColor = new JButton("Set Color");
-
-        btnColor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color initialColor = Color.WHITE;
-
-                // Launch the color chooser dialog
-                Color newColor = JColorChooser.showDialog(
-                        getTopLevelAncestor(),
-                        "Select Light Color",
-                        initialColor
-                );
-
-                if (newColor != null) {
-                    // TODO: Replace this placeholder with your actual model update logic
-                    System.out.println("Selected Color: " + newColor);
-
-                    // You would typically store the last chosen color or update the indicator here
-                }
-            }
-        });
+        btnRemove = new JButton("Remove String Light");
 
         // Add controls to the row
         actionRow.add(new JLabel("Power:"));
         actionRow.add(chkOnOff);
         actionRow.add(Box.createHorizontalStrut(20)); // Spacing
         actionRow.add(Box.createHorizontalStrut(20));
-        actionRow.add(btnColor);
+        actionRow.add(btnRemove);
 
         // Add rows to the main panel
         add(selectionRow);
@@ -82,8 +57,8 @@ public class ControlPanel extends JPanel implements Observer {
         return chkOnOff;
     }
 
-    public JButton getBtnColor() {
-        return btnColor;
+    public JButton getBtnRemove() {
+        return btnRemove;
     }
 
     @Override

@@ -4,6 +4,7 @@ package de.tu_darmstadt.lichterketten_steuerung.controllers;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.Controller;
 import de.tu_darmstadt.lichterketten_steuerung.view.Observer;
+import de.tu_darmstadt.lichterketten_steuerung.view.StringLightListPanel;
 import de.tu_darmstadt.lichterketten_steuerung.view.StringLightWidget;
 
 import javax.swing.*;
@@ -33,9 +34,24 @@ public class StringLightList implements Controller {
         stringlightList.add(stringLight);
         stringlightListPanel.add(stringLightWidget, stringlightListPanel.getComponentCount()-2);
 
-        stringlightListPanel.updateUI();
-
         subscribe(stringLightWidget);
+        notifyObservers();
+    }
+
+    public void onRemoveButton() {
+        if(selectedStringLight == null){
+            System.out.println("No StringLight selected");
+            return;
+        }
+        for(Component widget:stringlightListPanel.getComponents()){
+            if(!(widget instanceof StringLightWidget stringLightWidget)){continue;}
+            if(stringLightWidget.getId().equals(selectedStringLight.id())){
+                stringlightListPanel.remove(stringLightWidget);
+                stringlightList.remove(selectedStringLight);
+
+                unsubscribe(stringLightWidget);
+            }
+        }
         notifyObservers();
     }
 

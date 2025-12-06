@@ -10,13 +10,11 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class MainWindow {
 
-    public JPanel stringlightListPanel;
-    public JTable macroTable;
-    public JButton btnOpenMacroEditor;
-    public JButton btnNewStringLight;
     public ControlPanel controlPanel;
 
     public JFrame frame;
+    public StringLightListPanel stringlightListPanel;
+    private StringLightList stringLightList;
 
     public MainWindow() {
         frame = new JFrame("Lichterketten Steuerung System");
@@ -25,11 +23,12 @@ public class MainWindow {
 
         frame.setSize(1000, 700);
 
-        StringLightListPanel stringlightListPanel = new StringLightListPanel();
+        stringlightListPanel = new StringLightListPanel();
         controlPanel = new ControlPanel();
 
-        StringLightList stringLightList = new StringLightList(stringlightListPanel.base);
+        stringLightList = new StringLightList(stringlightListPanel.base);
         stringLightList.subscribe(controlPanel);
+        stringLightList.subscribe(stringlightListPanel);
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, stringlightListPanel, controlPanel);
         mainSplit.setDividerLocation((int) Math.round(frame.getHeight() * 0.75));
@@ -39,8 +38,13 @@ public class MainWindow {
 
         frame.setVisible(true);
 
+        bindMethods();
+
+    }
+
+    private void bindMethods() {
         stringlightListPanel.btnNewStringLight.addActionListener( e -> {
-           stringLightList.onAddButton(getAreaName("Enter Area", "Name:"));
+            stringLightList.onAddButton(getAreaName("Enter Area", "Name:"));
         });
 
         controlPanel.getAreaSelector().addActionListener( e -> {
@@ -58,12 +62,14 @@ public class MainWindow {
         });
 
         controlPanel.getChkOnOff().addActionListener( e -> {
-           stringLightList.onLightSwitch(controlPanel.getChkOnOff().isSelected());
+            stringLightList.onLightSwitch(controlPanel.getChkOnOff().isSelected());
         });
-    }
 
-    private void bindMethods() {
-
+        controlPanel.getBtnRemove().addActionListener(e -> {
+            stringLightList.onRemoveButton();
+            controlPanel.getAreaSelector().setSelectedIndex(0);
+            controlPanel.getLightIdSelector().setSelectedIndex(0);
+        });
     }
 
     public String getAreaName(String title, String message) {
@@ -127,31 +133,6 @@ public class MainWindow {
 
         // Once the dialog is disposed, execution continues here, returning the result
         return inputValue.get();
-    }
-
-    private JComponent createMacroListPanel() {
-        String[] columns = {"Macro Name", "Is Active"};
-        Object[][] placeholderData = {{"Sunset Mode", "YES"}, {"Party Mode", "NO"}};
-
-        DefaultTableModel model = new DefaultTableModel(placeholderData, columns);
-        macroTable = new JTable(model);
-
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Macros"));
-        panel.add(new JScrollPane(macroTable), BorderLayout.CENTER);
-        return panel;
-    }
-
-    private JComponent createMacroEditorPanel() {
-        JPanel panel = new JPanel(new GridBagLayout()); // Centers component
-        panel.setBorder(BorderFactory.createTitledBorder("Editor"));
-
-        btnOpenMacroEditor = new JButton("Open Macro Editor");
-        btnOpenMacroEditor.setPreferredSize(new Dimension(150, 40));
-
-        panel.add(btnOpenMacroEditor);
-
-        return panel;
     }
 
 }
