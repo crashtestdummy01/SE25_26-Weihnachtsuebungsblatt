@@ -11,10 +11,8 @@ import java.util.concurrent.atomic.AtomicReference;
 public class MainWindow {
 
     public ControlPanel controlPanel;
-
     public JFrame frame;
     public StringLightListPanel stringlightListPanel;
-    private StringLightList stringLightList;
 
     public MainWindow() {
         frame = new JFrame("Lichterketten Steuerung System");
@@ -26,10 +24,6 @@ public class MainWindow {
         stringlightListPanel = new StringLightListPanel();
         controlPanel = new ControlPanel();
 
-        stringLightList = new StringLightList(stringlightListPanel.base);
-        stringLightList.subscribe(controlPanel);
-        stringLightList.subscribe(stringlightListPanel);
-
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, stringlightListPanel, controlPanel);
         mainSplit.setDividerLocation((int) Math.round(frame.getHeight() * 0.75));
 
@@ -37,39 +31,6 @@ public class MainWindow {
         frame.setLocationRelativeTo(null);
 
         frame.setVisible(true);
-
-        bindMethods();
-
-    }
-
-    private void bindMethods() {
-        stringlightListPanel.btnNewStringLight.addActionListener( e -> {
-            stringLightList.onAddButton(getAreaName("Enter Area", "Name:"));
-        });
-
-        controlPanel.getAreaSelector().addActionListener( e -> {
-            stringLightList.selectedArea = (String) controlPanel.getAreaSelector().getSelectedItem();
-            if(stringLightList.selectedArea == null){stringLightList.selectedArea = "--None--";}
-            if(stringLightList.selectedArea.equals("--None--")){stringLightList.selectedArea = null;}
-            stringLightList.setSelectedStringLight(null);
-            controlPanel.getLightIdSelector().setSelectedIndex(0);
-            stringLightList.notifyObservers();
-        });
-
-        controlPanel.getLightIdSelector().addActionListener( e -> {
-            stringLightList.setSelectedStringLight((String) controlPanel.getLightIdSelector().getSelectedItem());
-            stringLightList.notifyObservers();
-        });
-
-        controlPanel.getChkOnOff().addActionListener( e -> {
-            stringLightList.onLightSwitch(controlPanel.getChkOnOff().isSelected());
-        });
-
-        controlPanel.getBtnRemove().addActionListener(e -> {
-            stringLightList.onRemoveButton();
-            controlPanel.getAreaSelector().setSelectedIndex(0);
-            controlPanel.getLightIdSelector().setSelectedIndex(0);
-        });
     }
 
     public String getAreaName(String title, String message) {
