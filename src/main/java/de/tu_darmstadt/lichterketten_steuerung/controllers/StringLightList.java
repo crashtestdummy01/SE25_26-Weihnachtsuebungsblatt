@@ -16,6 +16,8 @@ public class StringLightList implements Controller {
     private List<StringLight> stringlightList;
 
     private List<Observer> observers = new ArrayList<>();
+    public String selectedArea;
+    public String selectedStringLight;
 
     private int idCounter = 100;
 
@@ -53,5 +55,12 @@ public class StringLightList implements Controller {
 
     public List<StringLight> getList() {
         return stringlightList;
+    }
+    public List<String> getAreas() {
+        return stringlightList.stream().map(StringLight::area).toList();
+    }
+
+    public List<String> getIDsInArea(String areaName) {
+        return stringlightList.stream().filter(light -> light.area().equals(areaName)).map(StringLight::id).toList();
     }
 }

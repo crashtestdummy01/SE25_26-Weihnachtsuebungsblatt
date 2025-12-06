@@ -95,8 +95,8 @@ public class StringLightWidget extends JPanel implements Observer{
     }
 
     @Override
-    public void update(StringLightList lightList) {
-        StringLight model = lightList.getList().stream()
+    public void update(Controller lightList) {
+        StringLight model = ((StringLightList) lightList).getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
                 .findFirst()
                 .orElse(null);

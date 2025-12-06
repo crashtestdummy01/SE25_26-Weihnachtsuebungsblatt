@@ -29,6 +29,7 @@ public class MainWindow {
         controlPanel = new ControlPanel();
 
         StringLightList stringLightList = new StringLightList(stringlightListPanel.base);
+        stringLightList.subscribe(controlPanel);
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, stringlightListPanel, controlPanel);
         mainSplit.setDividerLocation((int) Math.round(frame.getHeight() * 0.75));
@@ -40,6 +41,16 @@ public class MainWindow {
 
         stringlightListPanel.btnNewStringLight.addActionListener( e -> {
            stringLightList.onAddButton(getAreaName("Enter Area", "Name:"));
+        });
+
+        controlPanel.getAreaSelector().addActionListener( e -> {
+            stringLightList.selectedArea = (String) controlPanel.getAreaSelector().getSelectedItem();
+            stringLightList.notifyObservers();
+        });
+
+        controlPanel.getAreaSelector().addActionListener( e -> {
+            stringLightList.selectedArea = (String) controlPanel.getAreaSelector().getSelectedItem();
+            stringLightList.notifyObservers();
         });
     }
 

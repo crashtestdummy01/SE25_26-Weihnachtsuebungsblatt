@@ -6,7 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 public class ControlPanel extends JPanel implements Observer {
 
@@ -68,13 +70,45 @@ public class ControlPanel extends JPanel implements Observer {
         add(actionRow);
     }
 
-    public void onPowerChanged() {}
-    public void onModeChanged() {}
-    public void onSetColor() {}
-    public void onLightDelete() {}
+    public JComboBox<String> getAreaSelector() {
+        return areaSelector;
+    }
+
+    public JComboBox<String> getLightIdSelector() {
+        return lightIdSelector;
+    }
+
+    public JCheckBox getChkOnOff() {
+        return chkOnOff;
+    }
+
+    public JButton getBtnColor() {
+        return btnColor;
+    }
 
     @Override
-    public void update(StringLightList lightList) {
+    public void update(Controller lightList) {
+        StringLightList stringLightList = (StringLightList) lightList;
+
+        int index = areaSelector.getSelectedIndex();
+        areaSelector.removeAllItems();
+        areaSelector.addItem("--None--");
+        for (String areaName: new TreeSet<>(stringLightList.getAreas())){
+            areaSelector.addItem(areaName);
+        }
+        try {
+            areaSelector.setSelectedIndex(index);
+        }catch (Exception ignored){}
+
+        index = lightIdSelector.getSelectedIndex();
+        lightIdSelector.removeAllItems();
+        lightIdSelector.addItem("--None--");
+        for (String areaName: new TreeSet<>(stringLightList.getIDsInArea(stringLightList.selectedArea))){
+            lightIdSelector.addItem(areaName);
+        }
+        try {
+            lightIdSelector.setSelectedIndex(index);
+        }catch (Exception ignored){}
     }
 
 }

@@ -32,7 +32,7 @@ public class StringLightListPanel extends JPanel  implements Observer {
     }
 
     @Override
-    public void update(StringLightList lightList) {
+    public void update(Controller lightList) {
 
     }
 }
