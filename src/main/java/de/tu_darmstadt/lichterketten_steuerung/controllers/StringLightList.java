@@ -15,7 +15,6 @@ import java.util.function.Predicate;
 public class StringLightList implements Controller {
     private JPanel stringlightListPanel;
     private List<StringLight> stringlightList;
-    private List<StringLight> selectedStringLights;
 
     private List<Observer> observers = new ArrayList<>();
 
@@ -23,8 +22,7 @@ public class StringLightList implements Controller {
 
     public StringLightList(JPanel stringlightListPanel) {
         this.stringlightListPanel = stringlightListPanel;
-        stringlightList = new ArrayList<StringLight>();
-        selectedStringLights = new ArrayList<>();
+        stringlightList = new ArrayList<>();
     }
 
     public void addStringLight(String areaName) {
@@ -35,50 +33,26 @@ public class StringLightList implements Controller {
         stringlightListPanel.add(stringLightWidget, 0);
 
         stringlightListPanel.updateUI();
-        notifyObservers();
 
-        System.out.println(stringLight.area());
-
-    }
-
-    public void switchStringLight(boolean state) {
-        selectedStringLights.forEach(stringLight -> {stringLight.setOn(state);});
-    }
-
-    public void selectStringLightsWith(Predicate<StringLight> predicate) {
-        selectedStringLights = stringlightList.stream().filter(predicate).toList();
+        subscribe(stringLightWidget);
         notifyObservers();
     }
 
-    public Set<String> getAreas() {
-        Set<String> areas = new HashSet<>();
-        for (StringLight stringLight : stringlightList) {
-            areas.add(stringLight.area());
-        }
-
-        return areas;
+    public void subscribe(Observer observer) {
+        this.observers.add(observer);
     }
 
-    public Set<String> getIDs() {
-        Set<String> ids = new HashSet<>();
-        for (StringLight stringLight : selectedStringLights) {
-            ids.add(stringLight.id());
-        }
-
-        return ids;
-    }
-
-    public void subscribe(Observer component){
-        this.observers.add(component);
-    }
-
-    public void unsubscribe(Observer component){
-        this.observers.remove(component);
+    public void unsubscribe(Observer observer){
+        this.observers.remove(observer);
     }
 
     public void notifyObservers(){
         for(Observer observer : observers){
             observer.update(this);
         }
+    }
+
+    public List<StringLight> getStringlightList() {
+        return stringlightList;
     }
 }

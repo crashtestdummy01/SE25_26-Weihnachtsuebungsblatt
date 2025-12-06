@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class MainWindow implements Observer {
+public class MainWindow {
 
     public JPanel stringlightListPanel;
     public JTable macroTable;
@@ -26,74 +26,20 @@ public class MainWindow implements Observer {
 
         frame.setSize(1000, 700);
 
-        JComponent stringlightListPanel = createLightListPanel();
+        JComponent stringlightListPanel = new StringLightListPanel();
         controlPanel = new ControlPanel();
-        JComponent macroListPanel = createMacroListPanel();
-        JComponent editMacroButtonPanel = createMacroEditorPanel();
 
-        JSplitPane splitLeft = new JSplitPane(JSplitPane.VERTICAL_SPLIT, stringlightListPanel, controlPanel);
-        splitLeft.setResizeWeight(0.7);
+        JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, stringlightListPanel, controlPanel);
+        mainSplit.setDividerLocation((int) Math.round(frame.getHeight() * 0.75));
 
-        JSplitPane splitRight = new JSplitPane(JSplitPane.VERTICAL_SPLIT, macroListPanel, editMacroButtonPanel);
-        splitRight.setResizeWeight(0.8);
-
-        JSplitPane splitMain = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, splitLeft, splitRight);
-        splitMain.setDividerLocation((int) Math.round(frame.getSize().width * 0.7));
-
-        frame.add(splitMain);
+        frame.add(mainSplit);
         frame.setLocationRelativeTo(null);
 
         frame.setVisible(true);
     }
 
-    @Override
-    public void update(StringLightList lightList) {
+    private void bindMethods() {
 
-    }
-
-    private JComponent createLightListPanel() {
-        stringlightListPanel = new JPanel();
-        stringlightListPanel.setLayout(new BoxLayout(stringlightListPanel, BoxLayout.Y_AXIS));
-        stringlightListPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
-
-        btnNewStringLight = new JButton("+");
-        btnNewStringLight.setFont(btnNewStringLight.getFont().deriveFont(Font.BOLD, 16f));
-        stringlightListPanel.add(btnNewStringLight);
-
-        stringlightListPanel.add(Box.createVerticalGlue());
-
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("String Lights"));
-        JScrollPane scrollPane = new JScrollPane(stringlightListPanel);
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        panel.add(scrollPane, BorderLayout.CENTER);
-
-        return panel;
-    }
-
-    private JComponent createMacroListPanel() {
-        String[] columns = {"Macro Name", "Is Active"};
-        Object[][] placeholderData = {{"Sunset Mode", "YES"}, {"Party Mode", "NO"}};
-
-        DefaultTableModel model = new DefaultTableModel(placeholderData, columns);
-        macroTable = new JTable(model);
-
-        JPanel panel = new JPanel(new BorderLayout());
-        panel.setBorder(BorderFactory.createTitledBorder("Macros"));
-        panel.add(new JScrollPane(macroTable), BorderLayout.CENTER);
-        return panel;
-    }
-
-    private JComponent createMacroEditorPanel() {
-        JPanel panel = new JPanel(new GridBagLayout()); // Centers component
-        panel.setBorder(BorderFactory.createTitledBorder("Editor"));
-
-        btnOpenMacroEditor = new JButton("Open Macro Editor");
-        btnOpenMacroEditor.setPreferredSize(new Dimension(150, 40));
-
-        panel.add(btnOpenMacroEditor);
-
-        return panel;
     }
 
     public String getAreaName(String title, String message) {
@@ -157,6 +103,31 @@ public class MainWindow implements Observer {
 
         // Once the dialog is disposed, execution continues here, returning the result
         return inputValue.get();
+    }
+
+    private JComponent createMacroListPanel() {
+        String[] columns = {"Macro Name", "Is Active"};
+        Object[][] placeholderData = {{"Sunset Mode", "YES"}, {"Party Mode", "NO"}};
+
+        DefaultTableModel model = new DefaultTableModel(placeholderData, columns);
+        macroTable = new JTable(model);
+
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBorder(BorderFactory.createTitledBorder("Macros"));
+        panel.add(new JScrollPane(macroTable), BorderLayout.CENTER);
+        return panel;
+    }
+
+    private JComponent createMacroEditorPanel() {
+        JPanel panel = new JPanel(new GridBagLayout()); // Centers component
+        panel.setBorder(BorderFactory.createTitledBorder("Editor"));
+
+        btnOpenMacroEditor = new JButton("Open Macro Editor");
+        btnOpenMacroEditor.setPreferredSize(new Dimension(150, 40));
+
+        panel.add(btnOpenMacroEditor);
+
+        return panel;
     }
 
 }

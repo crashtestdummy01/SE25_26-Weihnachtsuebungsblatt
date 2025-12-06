@@ -6,17 +6,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 
 public class ControlPanel extends JPanel implements Observer {
 
-    public JComboBox<String> areaSelector;
-    public JComboBox<String> lightIdSelector;
-
-    private ButtonGroup powerGroup;
-    public JRadioButton rbOn;
-    public JRadioButton rbOff;
-
-    public JButton btnColor;
+    private JComboBox<String> areaSelector;
+    private JComboBox<String> lightIdSelector;
+    private JCheckBox chkOnOff;
+    private JButton btnColor;
 
     public ControlPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -33,14 +30,7 @@ public class ControlPanel extends JPanel implements Observer {
 
         JPanel actionRow = new JPanel(new FlowLayout(FlowLayout.LEFT));
 
-        // 1. Radio Buttons (ON/OFF)
-        rbOn = new JRadioButton("ON");
-        rbOff = new JRadioButton("OFF");
-        rbOff.setSelected(true); // Default selection
-
-        powerGroup = new ButtonGroup();
-        powerGroup.add(rbOn);
-        powerGroup.add(rbOff);
+        chkOnOff = new JCheckBox("ON/OFF");
 
         // 3. Button (COLOR)
         btnColor = new JButton("Set Color");
@@ -68,8 +58,7 @@ public class ControlPanel extends JPanel implements Observer {
 
         // Add controls to the row
         actionRow.add(new JLabel("Power:"));
-        actionRow.add(rbOn);
-        actionRow.add(rbOff);
+        actionRow.add(chkOnOff);
         actionRow.add(Box.createHorizontalStrut(20)); // Spacing
         actionRow.add(Box.createHorizontalStrut(20));
         actionRow.add(btnColor);
@@ -79,26 +68,13 @@ public class ControlPanel extends JPanel implements Observer {
         add(actionRow);
     }
 
+    public void onPowerChanged() {}
+    public void onModeChanged() {}
+    public void onSetColor() {}
+    public void onLightDelete() {}
+
     @Override
     public void update(StringLightList lightList) {
-        try {
-            StringLightList stringLightList = (StringLightList) lightList;
-            int index = areaSelector.getSelectedIndex();
-            areaSelector.removeAllItems();
-            areaSelector.addItem("--None--");
-            for (String area : stringLightList.getAreas()) {
-                areaSelector.addItem(area);
-            }
-            areaSelector.setSelectedIndex(index);
-            areaSelector.updateUI();
-
-            lightIdSelector.removeAllItems();
-            lightIdSelector.addItem("--None--");
-            for (String light : stringLightList.getIDs()) {
-                lightIdSelector.addItem(light);
-            }
-
-            lightIdSelector.updateUI();
-        }catch (Exception ignored) {}
     }
+
 }

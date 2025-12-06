@@ -45,11 +45,6 @@ public class MacroEditor {
             }
         });
 
-        controlPanel.areaSelector.addActionListener(e -> {
-            String selectedArea = (String) controlPanel.areaSelector.getSelectedItem();
-            controller.selectStringLightsWith(stringLight -> stringLight.area().equals(selectedArea));
-        });
-
         dialog.pack();
         dialog.setLocationRelativeTo(owner);
     }
@@ -85,7 +80,6 @@ public class MacroEditor {
 
     public void show() {
         controller.subscribe(controlPanel);
-        controller.notifyObservers();
         dialog.setVisible(true);
     }
 

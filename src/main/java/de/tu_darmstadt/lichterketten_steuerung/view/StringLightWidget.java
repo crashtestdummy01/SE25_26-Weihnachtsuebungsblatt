@@ -1,5 +1,6 @@
 package de.tu_darmstadt.lichterketten_steuerung.view;
 
+import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 
 import javax.swing.*;
@@ -7,7 +8,7 @@ import java.awt.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
-public class StringLightWidget extends JPanel {
+public class StringLightWidget extends JPanel implements Observer{
     private final JLabel infoLabel;
     private final JPanel colorIndicator;
     private final JPanel statusIndicator;
@@ -15,6 +16,8 @@ public class StringLightWidget extends JPanel {
     private static final Dimension INDICATOR_SIZE = new Dimension(16, 16);
     private static final Color STATUS_ON_COLOR = Color.YELLOW;
     private static final Color STATUS_OFF_COLOR = Color.BLACK;
+
+    private String id;
 
     public StringLightWidget(String id, Color initialColor, boolean isOn) {
         super(new BorderLayout(5, 0));
@@ -24,7 +27,7 @@ public class StringLightWidget extends JPanel {
         setBorder(new LineBorder(Color.GRAY, 2));
         setBackground(Color.WHITE);
 
-
+        this.id=id;
         infoLabel = new JLabel(id);
         infoLabel.setFont(infoLabel.getFont().deriveFont(Font.BOLD, 12f));
         infoLabel.setBorder(new EmptyBorder(0, 10, 0, 0));
@@ -78,7 +81,6 @@ public class StringLightWidget extends JPanel {
 
     public void setLightColor(Color c) {
         colorIndicator.setBackground(c);
-        // Repaint needed for color changes to show immediately
         colorIndicator.repaint();
     }
 
@@ -90,5 +92,17 @@ public class StringLightWidget extends JPanel {
     private void updateStatusIndicator(boolean isOn) {
         statusIndicator.setBackground(isOn ? STATUS_ON_COLOR : STATUS_OFF_COLOR);
         statusIndicator.setToolTipText(isOn ? "Status: ON" : "Status: OFF");
+    }
+
+    @Override
+    public void update(StringLightList lightList) {
+        StringLight model = lightList.getStringlightList().stream()
+                .filter(stringLight -> stringLight.id().equals(id))
+                .findFirst()
+                .orElse(null);
+
+        if (model == null) { return;}
+        setStatus(model.isOn());
+        setLightColor(model.color());
     }
 }
