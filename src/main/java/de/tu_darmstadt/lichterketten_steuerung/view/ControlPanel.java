@@ -89,6 +89,8 @@ public class ControlPanel extends JPanel implements Observer {
     @Override
     public void update(Controller lightList) {
         StringLightList stringLightList = (StringLightList) lightList;
+        ActionListener areaDropDownActionListener = removeActionListener(areaSelector);
+        ActionListener idDropDownActionListener = removeActionListener(lightIdSelector);
 
         int index = areaSelector.getSelectedIndex();
         areaSelector.removeAllItems();
@@ -101,6 +103,7 @@ public class ControlPanel extends JPanel implements Observer {
         }catch (Exception ignored){}
 
         index = lightIdSelector.getSelectedIndex();
+        System.out.println(lightIdSelector.getSelectedIndex());
         lightIdSelector.removeAllItems();
         lightIdSelector.addItem("--None--");
         for (String areaName: new TreeSet<>(stringLightList.getIDsInArea(stringLightList.selectedArea))){
@@ -109,6 +112,21 @@ public class ControlPanel extends JPanel implements Observer {
         try {
             lightIdSelector.setSelectedIndex(index);
         }catch (Exception ignored){}
+
+        areaSelector.addActionListener(areaDropDownActionListener);
+        lightIdSelector.addActionListener(idDropDownActionListener);
+    }
+
+    public ActionListener removeActionListener(JComboBox<String> dropdown) {
+        ActionListener[] listeners = dropdown.getListeners(ActionListener.class);
+
+        if (listeners.length > 0) {
+            ActionListener targetListener = listeners[0];
+            dropdown.removeActionListener(targetListener);
+
+            return listeners[0];
+        }
+        return null;
     }
 
 }

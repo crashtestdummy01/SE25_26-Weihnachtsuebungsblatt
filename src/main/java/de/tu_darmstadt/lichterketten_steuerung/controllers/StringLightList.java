@@ -17,7 +17,7 @@ public class StringLightList implements Controller {
 
     private List<Observer> observers = new ArrayList<>();
     public String selectedArea;
-    public String selectedStringLight;
+    public StringLight selectedStringLight;
 
     private int idCounter = 100;
 
@@ -36,6 +36,19 @@ public class StringLightList implements Controller {
         stringlightListPanel.updateUI();
 
         subscribe(stringLightWidget);
+        notifyObservers();
+    }
+
+    public void onLightSwitch(boolean state){
+        if(selectedArea == null){return;}
+        if(selectedStringLight == null){
+            for (StringLight stringLight: getStringLightsInArea(selectedArea)){
+                stringLight.setOn(state);
+            }
+        }else{
+            selectedStringLight.setOn(state);
+        }
+
         notifyObservers();
     }
 
@@ -62,5 +75,16 @@ public class StringLightList implements Controller {
 
     public List<String> getIDsInArea(String areaName) {
         return stringlightList.stream().filter(light -> light.area().equals(areaName)).map(StringLight::id).toList();
+    }
+
+    private List<StringLight> getStringLightsInArea(String areaName) {
+        return stringlightList.stream().filter(light -> light.area().equals(areaName)).toList();
+    }
+
+    public void setSelectedStringLight(String id) {
+        this.selectedStringLight = stringlightList.stream()
+                .filter(light -> light.id().equals(id))
+                .findFirst()
+                .orElse(null);
     }
 }

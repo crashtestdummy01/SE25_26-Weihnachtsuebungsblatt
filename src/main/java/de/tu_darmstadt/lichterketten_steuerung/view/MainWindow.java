@@ -45,12 +45,20 @@ public class MainWindow {
 
         controlPanel.getAreaSelector().addActionListener( e -> {
             stringLightList.selectedArea = (String) controlPanel.getAreaSelector().getSelectedItem();
+            if(stringLightList.selectedArea == null){stringLightList.selectedArea = "--None--";}
+            if(stringLightList.selectedArea.equals("--None--")){stringLightList.selectedArea = null;}
+            stringLightList.setSelectedStringLight(null);
+            controlPanel.getLightIdSelector().setSelectedIndex(0);
             stringLightList.notifyObservers();
         });
 
-        controlPanel.getAreaSelector().addActionListener( e -> {
-            stringLightList.selectedArea = (String) controlPanel.getAreaSelector().getSelectedItem();
+        controlPanel.getLightIdSelector().addActionListener( e -> {
+            stringLightList.setSelectedStringLight((String) controlPanel.getLightIdSelector().getSelectedItem());
             stringLightList.notifyObservers();
+        });
+
+        controlPanel.getChkOnOff().addActionListener( e -> {
+           stringLightList.onLightSwitch(controlPanel.getChkOnOff().isSelected());
         });
     }
 
