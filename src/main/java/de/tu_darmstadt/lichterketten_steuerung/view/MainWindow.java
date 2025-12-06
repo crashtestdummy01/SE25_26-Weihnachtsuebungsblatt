@@ -82,6 +82,7 @@ public class MainWindow {
         };
 
         ActionListener cancelListener = e -> {
+            if (inputValue.get() == null){dialog.dispose(); return;}
             if (inputValue.get().isEmpty()) {
                 JOptionPane.showMessageDialog(dialog, "Please enter an area.", "Input Required", JOptionPane.WARNING_MESSAGE);
                 return;

@@ -26,6 +26,7 @@ public class StringLightListController implements Controller {
     }
 
     public void addStringLight(String areaName) {
+        if (selectedArea == null) {return;}
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
         StringLightWidget stringLightWidget = new StringLightWidget(stringLight.id(), stringLight.isOn());
