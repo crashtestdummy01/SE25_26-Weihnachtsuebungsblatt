@@ -1,23 +1,21 @@
 package de.tu_darmstadt.lichterketten_steuerung.controllers;
 
 
-import de.tu_darmstadt.lichterketten_steuerung.view.ControlPanel;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.ControlPanel;
 import de.tu_darmstadt.lichterketten_steuerung.view.MainWindow;
-import de.tu_darmstadt.lichterketten_steuerung.view.StringLightListPanel;
-
-import java.awt.*;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightListPanel;
 
 public class MainWindowController {
     private ControlPanel controlPanel;
     private StringLightListPanel stringLightListPanel;
-    private StringLightList stringLightList;
+    private StringLightListController stringLightList;
     private MainWindow mainWindow;
 
     public MainWindowController(MainWindow mainWindow) {
         this.mainWindow = mainWindow;
         this.controlPanel = mainWindow.controlPanel;
         this.stringLightListPanel = mainWindow.stringlightListPanel;
-        this.stringLightList = new StringLightList(stringLightListPanel.base);
+        this.stringLightList = new StringLightListController(stringLightListPanel.base);
 
         stringLightList.subscribe(controlPanel);
         stringLightList.subscribe(stringLightListPanel);
@@ -25,18 +23,16 @@ public class MainWindowController {
         bindMethods();
     }
 
+    /**
+     * Binds action listeners to GUI components
+     */
     private void bindMethods() {
         stringLightListPanel.btnNewStringLight.addActionListener( e -> {
-            stringLightList.onAddButton(mainWindow.getAreaName("Enter Area", "Name:"));
+            stringLightList.addStringLight(mainWindow.getAreaName("Enter Area", "Name:"));
         });
 
         controlPanel.getAreaSelector().addActionListener( e -> {
-            stringLightList.selectedArea = (String) controlPanel.getAreaSelector().getSelectedItem();
-            if(stringLightList.selectedArea == null){stringLightList.selectedArea = "--None--";}
-            if(stringLightList.selectedArea.equals("--None--")){stringLightList.selectedArea = null;}
-            stringLightList.setSelectedStringLight(null);
-            controlPanel.getLightIdSelector().setSelectedIndex(0);
-            stringLightList.notifyObservers();
+            onAreaSelect();
         });
 
         controlPanel.getLightIdSelector().addActionListener( e -> {
@@ -45,13 +41,30 @@ public class MainWindowController {
         });
 
         controlPanel.getChkOnOff().addActionListener( e -> {
-            stringLightList.onLightSwitch(controlPanel.getChkOnOff().isSelected());
+            stringLightList.switchStringLights(controlPanel.getChkOnOff().isSelected());
         });
 
         controlPanel.getBtnRemove().addActionListener(e -> {
-            stringLightList.onRemoveButton();
+            stringLightList.removeStringLight();
+
+            //Reset selection dropdowns
             controlPanel.getAreaSelector().setSelectedIndex(0);
             controlPanel.getLightIdSelector().setSelectedIndex(0);
         });
+    }
+
+    private void onAreaSelect(){
+        stringLightList.setSelectedArea((String) controlPanel.getAreaSelector().getSelectedItem());
+
+        //Safety net if selected area is somehow null
+        if(stringLightList.getSelectedArea()  == null){stringLightList.setSelectedArea("--None--");}
+
+        //Reset selection
+        if(stringLightList.getSelectedArea() .equals("--None--")){stringLightList.setSelectedArea(null);}
+        stringLightList.setSelectedStringLight(null);
+        controlPanel.getLightIdSelector().setSelectedIndex(0);
+
+
+        stringLightList.notifyObservers();
     }
 }

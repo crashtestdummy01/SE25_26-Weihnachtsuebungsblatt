@@ -1,6 +1,7 @@
-package de.tu_darmstadt.lichterketten_steuerung.view;
+package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
 
-import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
+import de.tu_darmstadt.lichterketten_steuerung.controllers.Controller;
+import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 
 import javax.swing.*;
@@ -8,6 +9,9 @@ import java.awt.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+/**
+ * Custom widget for a string light
+ */
 public class StringLightWidget extends JPanel implements Observer{
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
@@ -18,7 +22,7 @@ public class StringLightWidget extends JPanel implements Observer{
 
     private String id;
 
-    public StringLightWidget(String id, Color initialColor, boolean isOn) {
+    public StringLightWidget(String id, boolean isOn) {
         super(new BorderLayout(5, 0));
 
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
@@ -70,7 +74,7 @@ public class StringLightWidget extends JPanel implements Observer{
 
     @Override
     public void update(Controller lightList) {
-        StringLight thisStringLightModel = ((StringLightList) lightList).getList().stream()
+        StringLight thisStringLightModel = ((StringLightListController) lightList).getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
                 .findFirst()
                 .orElse(null);

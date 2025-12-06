@@ -1,11 +1,10 @@
-package de.tu_darmstadt.lichterketten_steuerung.view;
+package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
 
-import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
+import de.tu_darmstadt.lichterketten_steuerung.controllers.Controller;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionListener;
 
 public class StringLightListPanel extends JPanel  implements Observer {
 

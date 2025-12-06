@@ -1,9 +1,10 @@
 package de.tu_darmstadt.lichterketten_steuerung.models;
 
-import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
-
 import java.awt.*;
 
+/**
+ * Mutable record to hold information about each string light in the system
+ */
 public class  StringLight{
 
     private String id;
