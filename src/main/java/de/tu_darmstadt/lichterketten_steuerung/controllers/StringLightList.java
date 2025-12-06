@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
-import java.util.function.Predicate;
 
 public class StringLightList implements Controller {
     private JPanel stringlightListPanel;
@@ -25,12 +24,12 @@ public class StringLightList implements Controller {
         stringlightList = new ArrayList<>();
     }
 
-    public void addStringLight(String areaName) {
+    public void onAddButton(String areaName) {
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
         StringLightWidget stringLightWidget = new StringLightWidget(stringLight.id(), stringLight.color(), stringLight.isOn());
         stringlightList.add(stringLight);
-        stringlightListPanel.add(stringLightWidget, 0);
+        stringlightListPanel.add(stringLightWidget, stringlightListPanel.getComponentCount()-2);
 
         stringlightListPanel.updateUI();
 
@@ -52,7 +51,7 @@ public class StringLightList implements Controller {
         }
     }
 
-    public List<StringLight> getStringlightList() {
+    public List<StringLight> getList() {
         return stringlightList;
     }
 }

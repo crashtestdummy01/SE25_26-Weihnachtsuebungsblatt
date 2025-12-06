@@ -4,7 +4,6 @@ import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicReference;
@@ -26,8 +25,10 @@ public class MainWindow {
 
         frame.setSize(1000, 700);
 
-        JComponent stringlightListPanel = new StringLightListPanel();
+        StringLightListPanel stringlightListPanel = new StringLightListPanel();
         controlPanel = new ControlPanel();
+
+        StringLightList stringLightList = new StringLightList(stringlightListPanel.base);
 
         JSplitPane mainSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, stringlightListPanel, controlPanel);
         mainSplit.setDividerLocation((int) Math.round(frame.getHeight() * 0.75));
@@ -36,6 +37,10 @@ public class MainWindow {
         frame.setLocationRelativeTo(null);
 
         frame.setVisible(true);
+
+        stringlightListPanel.btnNewStringLight.addActionListener( e -> {
+           stringLightList.onAddButton(getAreaName("Enter Area", "Name:"));
+        });
     }
 
     private void bindMethods() {
