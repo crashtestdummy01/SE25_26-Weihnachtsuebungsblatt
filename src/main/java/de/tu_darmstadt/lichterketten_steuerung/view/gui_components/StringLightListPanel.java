@@ -6,7 +6,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class StringLightListPanel extends JPanel  implements Observer {
+public class StringLightListPanel extends JPanel{
 
     public JButton btnNewStringLight;
     public JPanel base;
@@ -30,8 +30,5 @@ public class StringLightListPanel extends JPanel  implements Observer {
         this.add(scrollPane, BorderLayout.CENTER);
     }
 
-    @Override
-    public void update(Observable lightList) {
-        updateUI();
-    }
+    //TODO: Aufgabe : Your code goes here
 }

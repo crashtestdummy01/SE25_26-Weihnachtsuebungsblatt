@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class StringLightListController implements Observable {
+public class StringLightListController {
     private JPanel stringlightListPanel;
     private List<StringLight> stringlightList;
 
@@ -33,8 +33,7 @@ public class StringLightListController implements Observable {
         stringlightList.add(stringLight);
         stringlightListPanel.add(stringLightWidget, stringlightListPanel.getComponentCount()-2);
 
-        subscribe(stringLightWidget);
-        notifyObservers();
+
     }
 
     public void removeStringLight() {
@@ -48,10 +47,9 @@ public class StringLightListController implements Observable {
                 stringlightListPanel.remove(stringLightWidget);
                 stringlightList.remove(selectedStringLight);
 
-                unsubscribe(stringLightWidget);
+
             }
         }
-        notifyObservers();
     }
 
     public void switchStringLights(boolean state){
@@ -64,26 +62,13 @@ public class StringLightListController implements Observable {
             selectedStringLight.setOn(state);
         }
 
-        notifyObservers();
     }
 
     private List<StringLight> getStringLightsInArea(String areaName) {
         return stringlightList.stream().filter(light -> light.area().equals(areaName)).toList();
     }
 
-    public void subscribe(Observer observer) {
-        this.observers.add(observer);
-    }
-
-    public void unsubscribe(Observer observer){
-        this.observers.remove(observer);
-    }
-
-    public void notifyObservers(){
-        for(Observer observer : observers){
-            observer.update(this);
-        }
-    }
+    //TODO: Aufgabe : Your code goes here
 
 
     // Public getters and setters

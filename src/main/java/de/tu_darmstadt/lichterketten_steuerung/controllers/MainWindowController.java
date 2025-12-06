@@ -17,9 +17,6 @@ public class MainWindowController {
         this.stringLightListPanel = mainWindow.stringlightListPanel;
         this.stringLightList = new StringLightListController(stringLightListPanel.base);
 
-        stringLightList.subscribe(controlPanel);
-        stringLightList.subscribe(stringLightListPanel);
-
         bindMethods();
     }
 
@@ -37,7 +34,6 @@ public class MainWindowController {
 
         controlPanel.getLightIdSelector().addActionListener( e -> {
             stringLightList.setSelectedStringLight((String) controlPanel.getLightIdSelector().getSelectedItem());
-            stringLightList.notifyObservers();
         });
 
         controlPanel.getChkOnOff().addActionListener( e -> {
@@ -63,8 +59,5 @@ public class MainWindowController {
         if(stringLightList.getSelectedArea() .equals("--None--")){stringLightList.setSelectedArea(null);}
         stringLightList.setSelectedStringLight(null);
         controlPanel.getLightIdSelector().setSelectedIndex(0);
-
-
-        stringLightList.notifyObservers();
     }
 }
