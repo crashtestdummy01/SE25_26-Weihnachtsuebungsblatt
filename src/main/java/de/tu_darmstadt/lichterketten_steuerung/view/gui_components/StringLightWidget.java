@@ -1,6 +1,6 @@
 package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
 
-import de.tu_darmstadt.lichterketten_steuerung.controllers.Controller;
+import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 
@@ -73,7 +73,7 @@ public class StringLightWidget extends JPanel implements Observer{
     }
 
     @Override
-    public void update(Controller lightList) {
+    public void update(Observable lightList) {
         StringLight thisStringLightModel = ((StringLightListController) lightList).getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
                 .findFirst()

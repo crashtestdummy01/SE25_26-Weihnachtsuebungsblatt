@@ -10,7 +10,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class StringLightListController implements Controller {
+public class StringLightListController implements Observable {
     private JPanel stringlightListPanel;
     private List<StringLight> stringlightList;
 

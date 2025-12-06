@@ -1,6 +1,6 @@
 package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
 
-import de.tu_darmstadt.lichterketten_steuerung.controllers.Controller;
+import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -31,7 +31,7 @@ public class StringLightListPanel extends JPanel  implements Observer {
     }
 
     @Override
-    public void update(Controller lightList) {
+    public void update(Observable lightList) {
         updateUI();
     }
 }

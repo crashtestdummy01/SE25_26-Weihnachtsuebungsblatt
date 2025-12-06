@@ -1,7 +1,7 @@
 package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
 
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
-import de.tu_darmstadt.lichterketten_steuerung.controllers.Controller;
+import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 
 import javax.swing.*;
 import java.awt.*;
@@ -72,7 +72,7 @@ public class ControlPanel extends JPanel implements Observer {
 
 
     @Override
-    public void update(Controller lightList) {
+    public void update(Observable lightList) {
         StringLightListController stringLightList = (StringLightListController) lightList;
         updateDropDownOptions(new TreeSet<>(stringLightList.getAreas()), areaSelector);
         updateDropDownOptions(new TreeSet<>(stringLightList.getIDsInArea(stringLightList.getSelectedArea())),  lightIdSelector);
