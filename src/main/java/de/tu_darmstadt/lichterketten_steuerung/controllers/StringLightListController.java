@@ -26,7 +26,7 @@ public class StringLightListController implements Observable {
     }
 
     public void addStringLight(String areaName) {
-        if (selectedArea == null) {return;}
+        if (areaName == null || areaName.isEmpty()) {return;}
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
         StringLightWidget stringLightWidget = new StringLightWidget(stringLight.id(), stringLight.isOn());
