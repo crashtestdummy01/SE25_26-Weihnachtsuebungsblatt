@@ -84,7 +84,7 @@ public class StringLightWidget extends JPanel{
                 .orElse(null);
     }
 
-    //TODO: Assignment : Your code goes here
+    //TODO: Assignment 3: Your code goes here
 
     public String getId() {
         return id;

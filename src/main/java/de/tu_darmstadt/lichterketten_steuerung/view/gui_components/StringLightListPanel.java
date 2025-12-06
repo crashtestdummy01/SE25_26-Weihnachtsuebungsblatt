@@ -30,5 +30,5 @@ public class StringLightListPanel extends JPanel{
         this.add(scrollPane, BorderLayout.CENTER);
     }
 
-    //TODO: Aufgabe : Your code goes here
+    //TODO: Aufgabe 3: Your code goes here
 }

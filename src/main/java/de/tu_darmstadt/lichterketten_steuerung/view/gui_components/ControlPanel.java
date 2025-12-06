@@ -70,7 +70,7 @@ public class ControlPanel extends JPanel {
     }
 
 
-    //TODO: Aufgabe : Your code goes here
+    //TODO: Aufgabe 3: Your code goes here
 
     /**
      * Removes the first ActionListener from a combobox and returns it

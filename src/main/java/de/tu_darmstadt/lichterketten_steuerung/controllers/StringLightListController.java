@@ -68,7 +68,7 @@ public class StringLightListController {
         return stringlightList.stream().filter(light -> light.area().equals(areaName)).toList();
     }
 
-    //TODO: Aufgabe : Your code goes here
+    //TODO: Aufgabe 2: Your code goes here
 
 
     // Public getters and setters
