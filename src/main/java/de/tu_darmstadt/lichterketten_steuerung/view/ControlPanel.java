@@ -4,16 +4,15 @@ import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightList;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
+import java.util.TreeSet;
 
 public class ControlPanel extends JPanel implements Observer {
 
     private JComboBox<String> areaSelector;
     private JComboBox<String> lightIdSelector;
     private JCheckBox chkOnOff;
-    private JButton btnColor;
+    private JButton btnRemove;
 
     public ControlPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
@@ -32,49 +31,77 @@ public class ControlPanel extends JPanel implements Observer {
 
         chkOnOff = new JCheckBox("ON/OFF");
 
-        // 3. Button (COLOR)
-        btnColor = new JButton("Set Color");
-
-        btnColor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color initialColor = Color.WHITE;
-
-                // Launch the color chooser dialog
-                Color newColor = JColorChooser.showDialog(
-                        getTopLevelAncestor(),
-                        "Select Light Color",
-                        initialColor
-                );
-
-                if (newColor != null) {
-                    // TODO: Replace this placeholder with your actual model update logic
-                    System.out.println("Selected Color: " + newColor);
-
-                    // You would typically store the last chosen color or update the indicator here
-                }
-            }
-        });
+        btnRemove = new JButton("Remove String Light");
 
         // Add controls to the row
         actionRow.add(new JLabel("Power:"));
         actionRow.add(chkOnOff);
         actionRow.add(Box.createHorizontalStrut(20)); // Spacing
         actionRow.add(Box.createHorizontalStrut(20));
-        actionRow.add(btnColor);
+        actionRow.add(btnRemove);
 
         // Add rows to the main panel
         add(selectionRow);
         add(actionRow);
     }
 
-    public void onPowerChanged() {}
-    public void onModeChanged() {}
-    public void onSetColor() {}
-    public void onLightDelete() {}
+    public JComboBox<String> getAreaSelector() {
+        return areaSelector;
+    }
+
+    public JComboBox<String> getLightIdSelector() {
+        return lightIdSelector;
+    }
+
+    public JCheckBox getChkOnOff() {
+        return chkOnOff;
+    }
+
+    public JButton getBtnRemove() {
+        return btnRemove;
+    }
 
     @Override
-    public void update(StringLightList lightList) {
+    public void update(Controller lightList) {
+        StringLightList stringLightList = (StringLightList) lightList;
+        ActionListener areaDropDownActionListener = removeActionListener(areaSelector);
+        ActionListener idDropDownActionListener = removeActionListener(lightIdSelector);
+
+        int index = areaSelector.getSelectedIndex();
+        areaSelector.removeAllItems();
+        areaSelector.addItem("--None--");
+        for (String areaName: new TreeSet<>(stringLightList.getAreas())){
+            areaSelector.addItem(areaName);
+        }
+        try {
+            areaSelector.setSelectedIndex(index);
+        }catch (Exception ignored){}
+
+        index = lightIdSelector.getSelectedIndex();
+        System.out.println(lightIdSelector.getSelectedIndex());
+        lightIdSelector.removeAllItems();
+        lightIdSelector.addItem("--None--");
+        for (String areaName: new TreeSet<>(stringLightList.getIDsInArea(stringLightList.selectedArea))){
+            lightIdSelector.addItem(areaName);
+        }
+        try {
+            lightIdSelector.setSelectedIndex(index);
+        }catch (Exception ignored){}
+
+        areaSelector.addActionListener(areaDropDownActionListener);
+        lightIdSelector.addActionListener(idDropDownActionListener);
+    }
+
+    public ActionListener removeActionListener(JComboBox<String> dropdown) {
+        ActionListener[] listeners = dropdown.getListeners(ActionListener.class);
+
+        if (listeners.length > 0) {
+            ActionListener targetListener = listeners[0];
+            dropdown.removeActionListener(targetListener);
+
+            return listeners[0];
+        }
+        return null;
     }
 
 }

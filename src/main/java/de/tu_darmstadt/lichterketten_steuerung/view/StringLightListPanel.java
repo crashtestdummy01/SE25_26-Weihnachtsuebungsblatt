@@ -9,10 +9,11 @@ import java.awt.event.ActionListener;
 
 public class StringLightListPanel extends JPanel  implements Observer {
 
-    JButton btnNewStringLight;
+    public JButton btnNewStringLight;
+    public JPanel base;
 
     public StringLightListPanel() {
-        JPanel base = new JPanel();
+        base = new JPanel();
         base.setLayout(new BoxLayout(base, BoxLayout.Y_AXIS));
         base.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -27,11 +28,11 @@ public class StringLightListPanel extends JPanel  implements Observer {
         setBorder(BorderFactory.createTitledBorder("String Lights"));
         JScrollPane scrollPane = new JScrollPane(base);
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        add(scrollPane, BorderLayout.CENTER);
+        this.add(scrollPane, BorderLayout.CENTER);
     }
 
     @Override
-    public void update(StringLightList lightList) {
-
+    public void update(Controller lightList) {
+        updateUI();
     }
 }
