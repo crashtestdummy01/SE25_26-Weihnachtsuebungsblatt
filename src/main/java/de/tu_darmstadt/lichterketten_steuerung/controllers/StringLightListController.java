@@ -4,6 +4,8 @@ package de.tu_darmstadt.lichterketten_steuerung.controllers;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightWidget;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightDisplay;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,13 +27,13 @@ public class StringLightListController implements Observable {
         stringlightList = new ArrayList<>();
     }
 
-    public void addStringLight(String areaName) {
+    public void addStringLight(String areaName, StringLightBuilder factory) {
         if (areaName == null || areaName.isEmpty()) {return;}
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
-        StringLightWidget stringLightWidget = new StringLightWidget(stringLight.id(), stringLight.isOn());
+        StringLightDisplay stringLightWidget = factory.getStringLightWidget(stringLight);
         stringlightList.add(stringLight);
-        stringlightListPanel.add(stringLightWidget, stringlightListPanel.getComponentCount()-2);
+        stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount()-2);
 
         subscribe(stringLightWidget);
         notifyObservers();

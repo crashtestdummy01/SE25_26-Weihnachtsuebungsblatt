@@ -40,7 +40,7 @@ public class MainWindow {
      * @param   message messege displayed inside the dialogue box
      * @return          the user input as String
      */
-    public String getAreaName(String title, String message) {
+    public String getUserInput(String title, String message) {
         AtomicReference<String> inputValue = new AtomicReference<>();
 
 
