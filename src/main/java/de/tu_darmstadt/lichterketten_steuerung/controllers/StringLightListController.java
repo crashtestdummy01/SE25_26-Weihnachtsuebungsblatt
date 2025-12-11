@@ -5,7 +5,7 @@ import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightWidget;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightDisplay;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightProduct;
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,7 +31,7 @@ public class StringLightListController implements Observable {
         if (areaName == null || areaName.isEmpty()) {return;}
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
-        StringLightDisplay stringLightWidget = factory.getStringLightWidget(stringLight);
+        StringLightProduct stringLightWidget = factory.getStringLightWidget(stringLight);
         stringlightList.add(stringLight);
         stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount()-2);
 
@@ -45,9 +45,9 @@ public class StringLightListController implements Observable {
             return;
         }
         for(Component widget:stringlightListPanel.getComponents()){
-            if(!(widget instanceof StringLightWidget stringLightWidget)){continue;}
+            if(!(widget instanceof StringLightProduct stringLightWidget)){continue;}
             if(stringLightWidget.getId().equals(selectedStringLight.id())){
-                stringlightListPanel.remove(stringLightWidget);
+                stringlightListPanel.remove(stringLightWidget.getComponent());
                 stringlightList.remove(selectedStringLight);
 
                 unsubscribe(stringLightWidget);

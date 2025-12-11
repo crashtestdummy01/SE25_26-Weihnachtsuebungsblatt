@@ -3,7 +3,7 @@ package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
 import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightDisplay;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightProduct;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,7 +13,7 @@ import javax.swing.border.LineBorder;
 /**
  * Custom widget for a string light
  */
-public class StringLightWidget extends JPanel implements Observer, StringLightDisplay {
+public class StringLightWidget extends JPanel implements Observer, StringLightProduct {
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 

@@ -7,7 +7,7 @@ import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightWi
 public class DefaultStringLightFactory implements StringLightBuilder{
 
     @Override
-    public StringLightDisplay getStringLightWidget(StringLight stringLight) {
+    public StringLightProduct getStringLightWidget(StringLight stringLight) {
         return new StringLightWidget(stringLight.id(), stringLight.isOn());
     }
 }
