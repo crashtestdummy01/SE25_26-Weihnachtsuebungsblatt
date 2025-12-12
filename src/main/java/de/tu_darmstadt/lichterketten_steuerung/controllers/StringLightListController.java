@@ -31,10 +31,10 @@ public class StringLightListController {
         if (areaName == null || areaName.isEmpty()) {return;}
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
+        stringlightList.add(stringLight);
 
         if(factory != null) {
             Product stringLightWidget = factory.getStringLightWidget(stringLight);
-            stringlightList.add(stringLight);
             stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount() - 2);
         }else {
             StringLightWidget stringLightWidget = new StringLightWidget(stringLight.id(), stringLight.isOn());
