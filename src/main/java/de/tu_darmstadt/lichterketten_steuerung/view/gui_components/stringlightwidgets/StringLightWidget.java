@@ -1,4 +1,4 @@
-package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
+package de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets;
 
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;

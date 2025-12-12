@@ -3,7 +3,7 @@ package de.tu_darmstadt.lichterketten_steuerung.controllers;
 
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightWidget;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets.StringLightWidget;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.Product;
 

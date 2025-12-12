@@ -1,6 +1,5 @@
-package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
+package de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets;
 
-import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 
@@ -12,7 +11,7 @@ import java.awt.*;
 /**
  * Custom widget for a string light
  */
-public class StallStringLightWidget extends JPanel{
+public class TreeStringLightWidget extends JPanel{
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 
@@ -22,7 +21,7 @@ public class StallStringLightWidget extends JPanel{
 
     private String id;
 
-    public StallStringLightWidget(String id, boolean isOn) {
+    public TreeStringLightWidget(String id, boolean isOn) {
         super(new BorderLayout(5, 0));
 
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
@@ -47,7 +46,7 @@ public class StallStringLightWidget extends JPanel{
 
         gbc.gridx = 0;
         gbc.gridy = 0;
-        indicatorsPanel.add(new JLabel("Stall Type"), gbc);
+        indicatorsPanel.add(new JLabel("Tree Type"), gbc);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -63,7 +62,8 @@ public class StallStringLightWidget extends JPanel{
         indicatorsPanel.add(statusIndicator, gbc);
 
         add(indicatorsPanel, BorderLayout.EAST);
-        setBackground(new Color(140, 0 , 0));
+
+        setBackground(new Color(0, 140, 0));
     }
 
     public void setStatus(boolean isOn) {
