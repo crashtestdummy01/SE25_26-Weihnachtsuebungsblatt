@@ -31,7 +31,7 @@ public class MainWindowController {
         stringLightListPanel.btnNewStringLight.addActionListener( e -> {
             String type = mainWindow.getUserInput("Select Type", "'1' Default; '2' Tree; '3' Stall");
 
-            //TODO: Aufgabe :Your code goes here
+            //TODO: Aufgabe 3:Your code goes here
 
 
             //TODO: If factory is implemented, pass it as the second argument to the addStringLightMethod instead of null
