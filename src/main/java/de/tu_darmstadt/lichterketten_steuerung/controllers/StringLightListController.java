@@ -5,7 +5,7 @@ import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightWidget;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightProduct;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.Product;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +33,7 @@ public class StringLightListController {
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
 
         if(factory != null) {
-            StringLightProduct stringLightWidget = factory.getStringLightWidget(stringLight);
+            Product stringLightWidget = factory.getStringLightWidget(stringLight);
             stringlightList.add(stringLight);
             stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount() - 2);
         }else {
@@ -48,7 +48,7 @@ public class StringLightListController {
             return;
         }
         for(Component widget:stringlightListPanel.getComponents()){
-            if(!(widget instanceof StringLightProduct stringLightWidget)){continue;}
+            if(!(widget instanceof Product stringLightWidget)){continue;}
             if(stringLightWidget.getId().equals(selectedStringLight.id())){
                 stringlightListPanel.remove(stringLightWidget.getComponent());
                 stringlightList.remove(selectedStringLight);

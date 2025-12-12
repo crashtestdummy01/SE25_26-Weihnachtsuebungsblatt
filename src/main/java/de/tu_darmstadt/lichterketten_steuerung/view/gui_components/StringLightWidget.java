@@ -1,9 +1,7 @@
 package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
 
-import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightProduct;
 
 import javax.swing.*;
 import java.awt.*;
