@@ -8,7 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.TreeSet;
 
-public class ControlPanel extends JPanel implements Observer {
+public class ControlPanel extends JPanel {
 
     private JComboBox<String> areaSelector;
     private JComboBox<String> lightIdSelector;
@@ -70,13 +70,7 @@ public class ControlPanel extends JPanel implements Observer {
     }
 
 
-
-    @Override
-    public void update(Observable lightList) {
-        StringLightListController stringLightList = (StringLightListController) lightList;
-        updateDropDownOptions(new TreeSet<>(stringLightList.getAreas()), areaSelector);
-        updateDropDownOptions(new TreeSet<>(stringLightList.getIDsInArea(stringLightList.getSelectedArea())),  lightIdSelector);
-    }
+    //TODO: Aufgabe 3: Your code goes here
 
     /**
      * Removes the first ActionListener from a combobox and returns it

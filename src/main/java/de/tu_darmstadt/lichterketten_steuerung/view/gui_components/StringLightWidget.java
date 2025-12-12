@@ -13,7 +13,7 @@ import javax.swing.border.LineBorder;
 /**
  * Custom widget for a string light
  */
-public class StringLightWidget extends JPanel implements Observer, StringLightProduct {
+public class StringLightWidget extends JPanel{
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 
@@ -73,22 +73,24 @@ public class StringLightWidget extends JPanel implements Observer, StringLightPr
         statusIndicator.setToolTipText(isOn ? "Status: ON" : "Status: OFF");
     }
 
-    @Override
-    public void update(Observable lightList) {
-        StringLight thisStringLightModel = ((StringLightListController) lightList).getList().stream()
+    /**
+     * Finds the corresponding StringLight instance in the controller's list
+     * @param controller    StringLightListController instance containing the model list
+     * @return              StringLight instance if found, null if not
+     */
+    private StringLight extractStringLightModel(Object controller) {
+        return ((StringLightListController) controller).getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
                 .findFirst()
                 .orElse(null);
-
-        if (thisStringLightModel == null) { return;}
-        setStatus(thisStringLightModel.isOn());
     }
+
+    //TODO: Assignment 3: Your code goes here
 
     public String getId() {
         return id;
     }
 
-    @Override
     public Component getComponent() {
         return this;
     }

@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class StringLightListController implements Observable {
+public class StringLightListController {
     private JPanel stringlightListPanel;
     private List<StringLight> stringlightList;
 
@@ -31,12 +31,15 @@ public class StringLightListController implements Observable {
         if (areaName == null || areaName.isEmpty()) {return;}
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
-        StringLightProduct stringLightWidget = factory.getStringLightWidget(stringLight);
-        stringlightList.add(stringLight);
-        stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount()-2);
 
-        subscribe(stringLightWidget);
-        notifyObservers();
+        if(factory != null) {
+            StringLightProduct stringLightWidget = factory.getStringLightWidget(stringLight);
+            stringlightList.add(stringLight);
+            stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount() - 2);
+        }else {
+            StringLightWidget stringLightWidget = new StringLightWidget(stringLight.id(), stringLight.isOn());
+            stringlightListPanel.add(stringLightWidget, stringlightListPanel.getComponentCount() - 2);
+        }
     }
 
     public void removeStringLight() {
@@ -50,10 +53,9 @@ public class StringLightListController implements Observable {
                 stringlightListPanel.remove(stringLightWidget.getComponent());
                 stringlightList.remove(selectedStringLight);
 
-                unsubscribe(stringLightWidget);
+
             }
         }
-        notifyObservers();
     }
 
     public void switchStringLights(boolean state){
@@ -66,26 +68,13 @@ public class StringLightListController implements Observable {
             selectedStringLight.setOn(state);
         }
 
-        notifyObservers();
     }
 
     private List<StringLight> getStringLightsInArea(String areaName) {
         return stringlightList.stream().filter(light -> light.area().equals(areaName)).toList();
     }
 
-    public void subscribe(Observer observer) {
-        this.observers.add(observer);
-    }
-
-    public void unsubscribe(Observer observer){
-        this.observers.remove(observer);
-    }
-
-    public void notifyObservers(){
-        for(Observer observer : observers){
-            observer.update(this);
-        }
-    }
+    //TODO: Aufgabe 2: Your code goes here
 
 
     // Public getters and setters

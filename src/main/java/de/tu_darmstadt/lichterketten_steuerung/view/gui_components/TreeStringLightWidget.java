@@ -13,7 +13,7 @@ import java.awt.*;
 /**
  * Custom widget for a string light
  */
-public class TreeStringLightWidget extends JPanel implements Observer, StringLightProduct {
+public class TreeStringLightWidget extends JPanel{
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 
@@ -78,7 +78,6 @@ public class TreeStringLightWidget extends JPanel implements Observer, StringLig
         statusIndicator.setToolTipText(isOn ? "Status: ON" : "Status: OFF");
     }
 
-    @Override
     public void update(Observable lightList) {
         StringLight thisStringLightModel = ((StringLightListController) lightList).getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
@@ -93,7 +92,6 @@ public class TreeStringLightWidget extends JPanel implements Observer, StringLig
         return id;
     }
 
-    @Override
     public Component getComponent() {
         return this;
     }

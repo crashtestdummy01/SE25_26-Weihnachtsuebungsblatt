@@ -13,7 +13,7 @@ import java.awt.*;
 /**
  * Custom widget for a string light
  */
-public class StallStringLightWidget extends JPanel implements Observer, StringLightProduct {
+public class StallStringLightWidget extends JPanel{
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 
@@ -77,7 +77,6 @@ public class StallStringLightWidget extends JPanel implements Observer, StringLi
         statusIndicator.setToolTipText(isOn ? "Status: ON" : "Status: OFF");
     }
 
-    @Override
     public void update(Observable lightList) {
         StringLight thisStringLightModel = ((StringLightListController) lightList).getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
@@ -92,7 +91,6 @@ public class StallStringLightWidget extends JPanel implements Observer, StringLi
         return id;
     }
 
-    @Override
     public Component getComponent() {
         return this;
     }
