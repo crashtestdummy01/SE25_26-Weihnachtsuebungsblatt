@@ -64,6 +64,8 @@ public class TreeStringLightWidget extends JPanel implements Observer, StringLig
         indicatorsPanel.add(statusIndicator, gbc);
 
         add(indicatorsPanel, BorderLayout.EAST);
+
+        setBackground(new Color(0, 140, 0));
     }
 
     public void setStatus(boolean isOn) {

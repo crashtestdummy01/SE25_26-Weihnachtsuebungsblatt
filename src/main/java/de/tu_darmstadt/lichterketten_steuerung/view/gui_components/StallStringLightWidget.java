@@ -64,6 +64,7 @@ public class StallStringLightWidget extends JPanel implements Observer, StringLi
         indicatorsPanel.add(statusIndicator, gbc);
 
         add(indicatorsPanel, BorderLayout.EAST);
+        setBackground(new Color(140, 0 , 0));
     }
 
     public void setStatus(boolean isOn) {
