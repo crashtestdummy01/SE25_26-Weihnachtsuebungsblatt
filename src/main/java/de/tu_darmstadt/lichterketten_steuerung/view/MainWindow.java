@@ -40,7 +40,7 @@ public class MainWindow {
      * @param   message messege displayed inside the dialogue box
      * @return          the user input as String
      */
-    public String getAreaName(String title, String message) {
+    public String getUserInput(String title, String message) {
         AtomicReference<String> inputValue = new AtomicReference<>();
 
 
@@ -75,7 +75,7 @@ public class MainWindow {
         ActionListener acceptListener = e -> {
             inputValue.set(inputField.getText().trim());
             if (inputValue.get().isEmpty()) {
-                JOptionPane.showMessageDialog(dialog, "Please enter an area.", "Input Required", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(dialog, "Field cannot be empty.", "Input Required", JOptionPane.WARNING_MESSAGE);
                 return;
             }
             dialog.dispose();

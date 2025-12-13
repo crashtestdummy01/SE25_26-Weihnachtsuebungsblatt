@@ -6,14 +6,14 @@ import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightProduct;
 
 import javax.swing.*;
-import java.awt.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import java.awt.*;
 
 /**
  * Custom widget for a string light
  */
-public class StringLightWidget extends JPanel implements Observer, StringLightProduct {
+public class StallStringLightWidget extends JPanel implements Observer, StringLightProduct {
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 
@@ -23,7 +23,7 @@ public class StringLightWidget extends JPanel implements Observer, StringLightPr
 
     private String id;
 
-    public StringLightWidget(String id, boolean isOn) {
+    public StallStringLightWidget(String id, boolean isOn) {
         super(new BorderLayout(5, 0));
 
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
@@ -46,8 +46,11 @@ public class StringLightWidget extends JPanel implements Observer, StringLightPr
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(2, 5, 2, 5); // Padding around cells
 
-
         gbc.gridx = 0;
+        gbc.gridy = 0;
+        indicatorsPanel.add(new JLabel("Stall Type"), gbc);
+
+        gbc.gridx = 1;
         gbc.gridy = 0;
         indicatorsPanel.add(new JLabel("Status:"), gbc);
 
@@ -56,11 +59,12 @@ public class StringLightWidget extends JPanel implements Observer, StringLightPr
         updateStatusIndicator(isOn);
         statusIndicator.setBorder(new LineBorder(Color.BLACK));
 
-        gbc.gridx = 1;
+        gbc.gridx = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         indicatorsPanel.add(statusIndicator, gbc);
 
         add(indicatorsPanel, BorderLayout.EAST);
+        setBackground(new Color(140, 0 , 0));
     }
 
     public void setStatus(boolean isOn) {
