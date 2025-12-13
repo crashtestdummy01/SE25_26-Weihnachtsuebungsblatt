@@ -22,7 +22,7 @@ java {
 def jvmArgsList = []
 if (project.hasProperty('highDpi')) {
     def scale = project.highDpi.toInteger()
-    if (scale == 1 || scale == 2) {
+    if (scale >= 1 && scale <= 3) {
         jvmArgsList << "-Dsun.java2d.uiScale=${scale}"
     } else {
         jvmArgsList << "-Dsun.java2d.uiScale=1"
@@ -44,6 +44,6 @@ jar {
     }
 }
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
