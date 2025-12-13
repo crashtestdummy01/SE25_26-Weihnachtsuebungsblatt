@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group = 'de.tu_darmstadt'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(25)
+    }
+}
+
+def jvmArgsList = []
+if (project.hasProperty('highDpi')) {
+    def scale = project.highDpi.toInteger()
+    if (scale == 1 || scale == 2) {
+        jvmArgsList << "-Dsun.java2d.uiScale=${scale}"
+    } else {
+        jvmArgsList << "-Dsun.java2d.uiScale=1"
+    }
+} else {
+    jvmArgsList << "-Dsun.java2d.uiScale=1"
+}
+
+application {
+    mainClass = 'de.tu_darmstadt.lichterketten_steuerung.App'
+    applicationDefaultJvmArgs = jvmArgsList
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'de.tu_darmstadt.lichterketten_steuerung.App'
+        )
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
