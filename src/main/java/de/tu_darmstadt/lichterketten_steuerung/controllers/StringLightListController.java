@@ -38,10 +38,15 @@ public class StringLightListController implements Observable {
         if(factory != null) {
             Product stringLightWidget = factory.getStringLightWidget(stringLight);
             stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount() - 2);
+
+            subscribe(stringLightWidget);
         }else {
             StringLightWidget stringLightWidget = new StringLightWidget(stringLight.id(), stringLight.isOn());
             stringlightListPanel.add(stringLightWidget, stringlightListPanel.getComponentCount() - 2);
+
+            subscribe(stringLightWidget);
         }
+        notifyObservers();
     }
 
     public void removeStringLight() {
@@ -83,6 +88,7 @@ public class StringLightListController implements Observable {
             selectedStringLight.setOn(state);
         }
 
+        notifyObservers();
     }
 
     private List<StringLight> getStringLightsInArea(String areaName) {
