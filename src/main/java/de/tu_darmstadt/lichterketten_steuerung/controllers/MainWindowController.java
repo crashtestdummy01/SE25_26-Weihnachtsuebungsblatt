@@ -21,6 +21,9 @@ public class MainWindowController {
         this.stringLightListPanel = mainWindow.stringlightListPanel;
         this.stringLightList = new StringLightListController(stringLightListPanel.base);
 
+        stringLightList.subscribe(controlPanel);
+        stringLightList.subscribe(stringLightListPanel);
+
         bindMethods();
     }
 
@@ -30,12 +33,11 @@ public class MainWindowController {
     private void bindMethods() {
         stringLightListPanel.btnNewStringLight.addActionListener( e -> {
             String type = mainWindow.getUserInput("Select Type", "'1' Default; '2' Tree; '3' Stall");
-
-            //TODO: Aufgabe 3:Your code goes here
-
-
-            //TODO: If factory is implemented, pass it as the second argument to the addStringLightMethod instead of null
-            stringLightList.addStringLight(mainWindow.getUserInput("Enter Area", "Name:"), null);
+            StringLightBuilder factory = new DefaultStringLightFactory();
+            if(type == null) {return;}
+            if(type.equals("2")){factory = new TreeStringLightFactory();}
+            if (type.equals("3")){factory = new StallStringLightFactory();}
+            stringLightList.addStringLight(mainWindow.getUserInput("Enter Area", "Name:"), factory);
         });
         controlPanel.getAreaSelector().addActionListener( e -> {
             onAreaSelect();
@@ -43,6 +45,7 @@ public class MainWindowController {
 
         controlPanel.getLightIdSelector().addActionListener( e -> {
             stringLightList.setSelectedStringLight((String) controlPanel.getLightIdSelector().getSelectedItem());
+            stringLightList.notifyObservers();
         });
 
         controlPanel.getChkOnOff().addActionListener( e -> {
@@ -68,5 +71,8 @@ public class MainWindowController {
         if(stringLightList.getSelectedArea() .equals("--None--")){stringLightList.setSelectedArea(null);}
         stringLightList.setSelectedStringLight(null);
         controlPanel.getLightIdSelector().setSelectedIndex(0);
+
+
+        stringLightList.notifyObservers();
     }
 }

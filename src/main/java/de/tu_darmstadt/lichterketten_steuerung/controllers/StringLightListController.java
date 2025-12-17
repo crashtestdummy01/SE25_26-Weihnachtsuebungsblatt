@@ -7,12 +7,13 @@ import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwi
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets.Product;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class StringLightListController {
+public class StringLightListController implements Observable {
     private JPanel stringlightListPanel;
     private List<StringLight> stringlightList;
 
@@ -55,7 +56,7 @@ public class StringLightListController {
                     stringlightListPanel.remove(stringLightWidget.getComponent());
                     stringlightList.remove(selectedStringLight);
 
-
+                    unsubscribe(stringLightWidget);
                 }
             }
 
@@ -65,10 +66,11 @@ public class StringLightListController {
                     stringlightListPanel.remove(stringLightWidget.getComponent());
                     stringlightList.remove(selectedStringLight);
 
-
+                    unsubscribe(stringLightWidget);
                 }
             }
         }
+        notifyObservers();
     }
 
     public void switchStringLights(boolean state){
@@ -87,7 +89,19 @@ public class StringLightListController {
         return stringlightList.stream().filter(light -> light.area().equals(areaName)).toList();
     }
 
-    //TODO: Aufgabe 2: Your code goes here
+    public void subscribe(Observer observer) {
+        this.observers.add(observer);
+    }
+
+    public void unsubscribe(Observer observer){
+        this.observers.remove(observer);
+    }
+
+    public void notifyObservers(){
+        for(Observer observer : observers){
+            observer.update(this);
+        }
+    }
 
 
     // Public getters and setters
