@@ -96,6 +96,7 @@ public class StringLightListController implements Observable {
     }
 
     public void subscribe(Observer observer) {
+        if(observer == null || this.observers.contains(observer)) {return;}
         this.observers.add(observer);
     }
 
