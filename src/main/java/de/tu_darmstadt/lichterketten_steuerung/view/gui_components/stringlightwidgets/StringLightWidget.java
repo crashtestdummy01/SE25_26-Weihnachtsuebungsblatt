@@ -1,19 +1,19 @@
-package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
+package de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets;
 
 import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightProduct;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
 
 import javax.swing.*;
+import java.awt.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
-import java.awt.*;
 
 /**
  * Custom widget for a string light
  */
-public class TreeStringLightWidget extends JPanel implements Observer, StringLightProduct {
+public class StringLightWidget extends JPanel implements Observer, Product {
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 
@@ -23,7 +23,7 @@ public class TreeStringLightWidget extends JPanel implements Observer, StringLig
 
     private String id;
 
-    public TreeStringLightWidget(String id, boolean isOn) {
+    public StringLightWidget(String id, boolean isOn) {
         super(new BorderLayout(5, 0));
 
         setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
@@ -46,11 +46,8 @@ public class TreeStringLightWidget extends JPanel implements Observer, StringLig
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(2, 5, 2, 5); // Padding around cells
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        indicatorsPanel.add(new JLabel("Tree Type"), gbc);
 
-        gbc.gridx = 1;
+        gbc.gridx = 0;
         gbc.gridy = 0;
         indicatorsPanel.add(new JLabel("Status:"), gbc);
 
@@ -59,13 +56,11 @@ public class TreeStringLightWidget extends JPanel implements Observer, StringLig
         updateStatusIndicator(isOn);
         statusIndicator.setBorder(new LineBorder(Color.BLACK));
 
-        gbc.gridx = 2;
+        gbc.gridx = 1;
         gbc.anchor = GridBagConstraints.CENTER;
         indicatorsPanel.add(statusIndicator, gbc);
 
         add(indicatorsPanel, BorderLayout.EAST);
-
-        setBackground(new Color(0, 140, 0));
     }
 
     public void setStatus(boolean isOn) {
@@ -78,13 +73,22 @@ public class TreeStringLightWidget extends JPanel implements Observer, StringLig
         statusIndicator.setToolTipText(isOn ? "Status: ON" : "Status: OFF");
     }
 
-    @Override
-    public void update(Observable lightList) {
-        StringLight thisStringLightModel = ((StringLightListController) lightList).getList().stream()
+    /**
+     * Finds the corresponding StringLight instance in the controller's list
+     * @param controller    StringLightListController instance containing the model list
+     * @return              StringLight instance if found, null if not
+     */
+    private StringLight extractStringLightModel(Object controller) {
+        return ((StringLightListController) controller).getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
                 .findFirst()
                 .orElse(null);
+    }
 
+    //TODO: Assignment 3: Your code goes here
+    @Override
+    public void update(Observable context){
+        StringLight thisStringLightModel = extractStringLightModel(context);
         if (thisStringLightModel == null) { return;}
         setStatus(thisStringLightModel.isOn());
     }
@@ -93,7 +97,6 @@ public class TreeStringLightWidget extends JPanel implements Observer, StringLig
         return id;
     }
 
-    @Override
     public Component getComponent() {
         return this;
     }

@@ -1,9 +1,9 @@
-package de.tu_darmstadt.lichterketten_steuerung.view.gui_components;
+package de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets;
 
 import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightProduct;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -13,7 +13,7 @@ import java.awt.*;
 /**
  * Custom widget for a string light
  */
-public class StallStringLightWidget extends JPanel implements Observer, StringLightProduct {
+public class StallStringLightWidget extends JPanel implements Observer, Product {
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 
@@ -77,13 +77,21 @@ public class StallStringLightWidget extends JPanel implements Observer, StringLi
         statusIndicator.setToolTipText(isOn ? "Status: ON" : "Status: OFF");
     }
 
-    @Override
-    public void update(Observable lightList) {
-        StringLight thisStringLightModel = ((StringLightListController) lightList).getList().stream()
+    /**
+     * Finds the corresponding StringLight instance in the controller's list
+     * @param controller    StringLightListController instance containing the model list
+     * @return              StringLight instance if found, null if not
+     */
+    private StringLight extractStringLightModel(Object controller) {
+        return ((StringLightListController) controller).getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
                 .findFirst()
                 .orElse(null);
+    }
 
+    @Override
+    public void update(Observable context){
+        StringLight thisStringLightModel = extractStringLightModel(context);
         if (thisStringLightModel == null) { return;}
         setStatus(thisStringLightModel.isOn());
     }

@@ -3,9 +3,10 @@ package de.tu_darmstadt.lichterketten_steuerung.controllers;
 
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightWidget;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets.StringLightWidget;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightProduct;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets.Product;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -31,11 +32,20 @@ public class StringLightListController implements Observable {
         if (areaName == null || areaName.isEmpty()) {return;}
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
-        StringLightProduct stringLightWidget = factory.getStringLightWidget(stringLight);
         stringlightList.add(stringLight);
-        stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount()-2);
 
-        subscribe(stringLightWidget);
+        // If a factory is not yet available use the default widget
+        if(factory != null) {
+            Product stringLightWidget = factory.getStringLightWidget(stringLight);
+            stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount() - 2);
+
+            subscribe(stringLightWidget);
+        }else {
+            StringLightWidget stringLightWidget = new StringLightWidget(stringLight.id(), stringLight.isOn());
+            stringlightListPanel.add(stringLightWidget, stringlightListPanel.getComponentCount() - 2);
+
+            subscribe(stringLightWidget);
+        }
         notifyObservers();
     }
 
@@ -45,12 +55,24 @@ public class StringLightListController implements Observable {
             return;
         }
         for(Component widget:stringlightListPanel.getComponents()){
-            if(!(widget instanceof StringLightProduct stringLightWidget)){continue;}
-            if(stringLightWidget.getId().equals(selectedStringLight.id())){
-                stringlightListPanel.remove(stringLightWidget.getComponent());
-                stringlightList.remove(selectedStringLight);
+            // Removal if the factory is not yet implemented
+            if(widget instanceof StringLightWidget stringLightWidget) {
+                if (stringLightWidget.getId().equals(selectedStringLight.id())) {
+                    stringlightListPanel.remove(stringLightWidget.getComponent());
+                    stringlightList.remove(selectedStringLight);
 
-                unsubscribe(stringLightWidget);
+                    unsubscribe(stringLightWidget);
+                }
+            }
+
+            // Removal if a factory created the widget
+            if(widget instanceof Product stringLightWidget) {
+                if (stringLightWidget.getId().equals(selectedStringLight.id())) {
+                    stringlightListPanel.remove(stringLightWidget.getComponent());
+                    stringlightList.remove(selectedStringLight);
+
+                    unsubscribe(stringLightWidget);
+                }
             }
         }
         notifyObservers();
@@ -74,6 +96,7 @@ public class StringLightListController implements Observable {
     }
 
     public void subscribe(Observer observer) {
+        if(observer == null || this.observers.contains(observer)) {return;}
         this.observers.add(observer);
     }
 
