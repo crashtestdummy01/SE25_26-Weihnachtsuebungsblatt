@@ -1,6 +1,5 @@
 package de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets;
 
-import de.tu_darmstadt.lichterketten_steuerung.controllers.Observable;
 import de.tu_darmstadt.lichterketten_steuerung.controllers.StringLightListController;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
@@ -87,7 +86,7 @@ public class StringLightWidget extends JPanel implements Observer, Product {
 
     //TODO: Assignment 3: Your code goes here
     @Override
-    public void update(Observable context){
+    public void update(StringLightListController context){
         StringLight thisStringLightModel = extractStringLightModel(context);
         if (thisStringLightModel == null) { return;}
         setStatus(thisStringLightModel.isOn());
