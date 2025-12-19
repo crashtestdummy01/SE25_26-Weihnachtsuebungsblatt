@@ -71,6 +71,7 @@ public class ControlPanel extends JPanel {
 
     /**
      * Removes the first ActionListener from a combobox and returns it
+     * Used here so that programmatically updating the combo boxes doesn't trigger updates
      * @param dropdown  combobox to remove ActionListener from
      * @return          the removed ActionListener if no listener was removed then null
      */
