@@ -12,7 +12,7 @@ import javax.swing.border.LineBorder;
 /**
  * Custom widget for a string light
  */
-public class StringLightWidget extends JPanel implements Observer, Product {
+public class StringLightWidget extends JPanel implements Observer, Widget {
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 

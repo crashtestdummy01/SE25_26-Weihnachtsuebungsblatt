@@ -4,10 +4,10 @@ package de.tu_darmstadt.lichterketten_steuerung.controllers;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.ControlPanel;
 import de.tu_darmstadt.lichterketten_steuerung.view.MainWindow;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightListPanel;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.DefaultStringLightFactory;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StallStringLightFactory;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.TreeStringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.DefaultStringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.StallStringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.StringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.TreeStringLightFactory;
 
 public class MainWindowController {
     private ControlPanel controlPanel;
@@ -33,7 +33,7 @@ public class MainWindowController {
     private void bindMethods() {
         stringLightListPanel.btnNewStringLight.addActionListener( e -> {
             String type = mainWindow.getUserInput("Select Type", "'1' Default; '2' Tree; '3' Stall");
-            StringLightBuilder factory = new DefaultStringLightFactory();
+            StringLightFactory factory = new DefaultStringLightFactory();
             if(type == null) {return;}
             if(type.equals("2")){factory = new TreeStringLightFactory();}
             if (type.equals("3")){factory = new StallStringLightFactory();}

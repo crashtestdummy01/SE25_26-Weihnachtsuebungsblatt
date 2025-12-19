@@ -4,8 +4,8 @@ package de.tu_darmstadt.lichterketten_steuerung.controllers;
 import de.tu_darmstadt.lichterketten_steuerung.models.StringLight;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.Observer;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets.StringLightWidget;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets.Product;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.StringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.stringlightwidgets.Widget;
 
 
 import javax.swing.*;
@@ -28,7 +28,7 @@ public class StringLightListController {
         stringlightList = new ArrayList<>();
     }
 
-    public void addStringLight(String areaName, StringLightBuilder factory) {
+    public void addStringLight(String areaName, StringLightFactory factory) {
         if (areaName == null || areaName.isEmpty()) {return;}
         String id = areaName + ":L-" + idCounter++;
         StringLight stringLight = new StringLight(id, false, StringLight.Mode.SOLID, Color.WHITE, areaName);
@@ -36,7 +36,7 @@ public class StringLightListController {
 
         // If a factory is not yet available use the default widget
         if(factory != null) {
-            Product stringLightWidget = factory.getStringLightWidget(stringLight);
+            Widget stringLightWidget = factory.getStringLightWidget(stringLight);
             stringlightListPanel.add(stringLightWidget.getComponent(), stringlightListPanel.getComponentCount() - 2);
 
             subscribe(stringLightWidget);
@@ -66,7 +66,7 @@ public class StringLightListController {
             }
 
             // Removal if a factory created the widget
-            if(widget instanceof Product stringLightWidget) {
+            if(widget instanceof Widget stringLightWidget) {
                 if (stringLightWidget.getId().equals(selectedStringLight.id())) {
                     stringlightListPanel.remove(stringLightWidget.getComponent());
                     stringlightList.remove(selectedStringLight);

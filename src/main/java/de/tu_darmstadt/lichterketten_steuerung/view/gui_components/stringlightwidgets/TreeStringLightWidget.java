@@ -12,7 +12,7 @@ import java.awt.*;
 /**
  * Custom widget for a string light
  */
-public class TreeStringLightWidget extends JPanel implements Observer, Product {
+public class TreeStringLightWidget extends JPanel implements Observer, Widget {
     private final JLabel infoLabel;
     private final JPanel statusIndicator;
 
