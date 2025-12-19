@@ -4,10 +4,10 @@ package de.tu_darmstadt.lichterketten_steuerung.controllers;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.ControlPanel;
 import de.tu_darmstadt.lichterketten_steuerung.view.MainWindow;
 import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.StringLightListPanel;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.DefaultStringLightFactory;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StallStringLightFactory;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.StringLightBuilder;
-import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.builder.TreeStringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.DefaultStringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.StallStringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.StringLightFactory;
+import de.tu_darmstadt.lichterketten_steuerung.view.gui_components.factories.TreeStringLightFactory;
 
 public class MainWindowController {
     private ControlPanel controlPanel;
