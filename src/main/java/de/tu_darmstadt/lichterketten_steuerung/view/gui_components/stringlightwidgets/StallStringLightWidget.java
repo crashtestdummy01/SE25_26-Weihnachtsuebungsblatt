@@ -81,8 +81,8 @@ public class StallStringLightWidget extends JPanel implements Observer, Widget {
      * @param controller    StringLightListController instance containing the model list
      * @return              StringLight instance if found, null if not
      */
-    private StringLight extractStringLightModel(Object controller) {
-        return ((StringLightListController) controller).getList().stream()
+    private StringLight extractStringLightModel(StringLightListController controller) {
+        return controller.getList().stream()
                 .filter(stringLight -> stringLight.id().equals(id))
                 .findFirst()
                 .orElse(null);
