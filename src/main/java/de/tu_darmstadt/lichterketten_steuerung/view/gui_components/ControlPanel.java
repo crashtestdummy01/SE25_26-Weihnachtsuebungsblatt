@@ -45,7 +45,8 @@ public class ControlPanel extends JPanel {
     }
 
     /**
-     * Set new options for area and string light selection drop down menus
+     * Set new options for area and string light selection drop down menus without triggering additional updates
+     * on the bound listener.
      * @param options   new options
      * @param dropDown  dropdown selection to update
      */
@@ -71,7 +72,6 @@ public class ControlPanel extends JPanel {
 
     /**
      * Removes the first ActionListener from a combobox and returns it
-     * Used here so that programmatically updating the combo boxes doesn't trigger updates
      * @param dropdown  combobox to remove ActionListener from
      * @return          the removed ActionListener if no listener was removed then null
      */
