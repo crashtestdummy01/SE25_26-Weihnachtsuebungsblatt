@@ -47,7 +47,8 @@ public class ControlPanel extends JPanel implements Observer {
     }
 
     /**
-     * Set new options for area and string light selection drop down menus
+     * Set new options for area and string light selection drop down menus without triggering additional updates
+     * on the bound listener.
      * @param options   new options
      * @param dropDown  dropdown selection to update
      */
